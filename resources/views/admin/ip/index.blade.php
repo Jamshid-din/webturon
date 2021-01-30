@@ -284,7 +284,7 @@
                             <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
                           </div>
                           <select class="form-control" data-style="btn btn-link" id="searchSubDepart" name="sub_depart_id" data-live-search="true">
-                            <option value="'+val.id+'"> Select Sub Department</option>
+                            <option value=""> Select Sub Department</option>
                             @foreach($childDep as $value)
                                 <option value="{{ $value->id }}"> {{ $value->title_uz }} </option>
                             @endforeach
@@ -376,8 +376,9 @@
               
               <div class="row">
                 <div class="col-md-10 m-auto">
-                  <form class="form" method="" action="">
+                  <form class="form" method="POST" action="{{ route('update-ip') }}">
                     @csrf
+                    <input type="text" name="id" id="ip_id" hidden>
                     <div class="form-group">
                       <div class="input-group">
                         <div class="input-group-prepend">
@@ -648,6 +649,7 @@
           let menuOptions     = ''
           let subMenuOptions  = ''
           
+          $('#ip_id').val(old.id)
           $('#update_fio').val(old.fio)
           $('#update_descr').val(old.descr)
           $('#update_ip').val(old.ip)

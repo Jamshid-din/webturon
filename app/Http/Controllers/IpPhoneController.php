@@ -74,7 +74,7 @@ class IpPhoneController extends Controller
         $childDep = SubDepartList::where('depart_id', $request->input(['depart_id']))->orderBy('sort', 'ASC')->get();
 
         if($request->input()) {
-
+            // dd($request->all());
             $depart_id      = $request->input(['depart_id']);
             $sub_depart_id  = $request->input(['sub_depart_id']);
             $fio            = $request->input(['fio']);
@@ -141,6 +141,30 @@ class IpPhoneController extends Controller
         $new->save();
 
         return back()->with('success', 'Successfully stored');        
+    }
+
+    public function adminIpUpdate(Request $request)
+    {
+        $this->validate($request, [
+            'depart_id'     => 'required',
+            'sub_depart_id' => 'required',
+            'fio'           => 'required',
+            'descr'         => 'required',
+            'ip'            => 'required',
+            'status'        => 'required',
+        ]);
+        $id = $request->input('id');
+        $model = IpList::find($id);
+        $model->update([
+            'depart_id'     => $request->input('depart_id'),
+            'sub_depart_id' => $request->input('sub_depart_id'),
+            'fio'           => $request->input('fio'),
+            'descr'         => $request->input('descr'),
+            'ip'            => $request->input('ip'),
+            'status'        => $request->input('status'),
+        ]);
+
+        return back()->with('success', 'Successfully updated');
     }
 
     public function adminGetSubDep($id)

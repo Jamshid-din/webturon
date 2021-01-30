@@ -50,15 +50,15 @@
                     <div id="main-nav" class="stellarnav">
                         <ul id="nav" class="nav navbar-nav">
                             <li><a href="/news-guest">Новости </a></li>
+                            <li><a href="/ip_phones">IP Телефон</a>
                             <li><a href="/docs">Документы</a>                                  
                             </li>
-                            <li><a href="/ip_phones">IP Телефон</a>
                             </li>
                             <li><a href="/staff">Персонал</a>                                   
                             </li>
                             <li><a href="/soft-guest">Программы</a>                                   
                             </li>
-                            <li><a href="">Web Turon</a>
+                            <li><a href="#">Web Turon</a>
                                 <ul>
                                     <li><a class="mainT" href="" target="_blank">Banking</a></li>
                                     <li><a class="mainT" href="" target="_blank">Cabinet</a></li>

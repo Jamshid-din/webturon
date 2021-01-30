@@ -40,7 +40,7 @@
                                 <div class="panel">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#faqs_{{$key}}"><i class="fa fa-{{ ($key == 0) ? 'plus':'minus' }}"></i> {{ $value->title_uz }}</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#faqs_{{$key}}"><i class="fa fa-minus"></i> {{ $value->title_uz }}</a>
                                         </h4>
                                     </div>
                                     <div id="faqs_{{$key}}" class="panel-collapse {{ ($key == 0) ? 'in':'collapse' }}">
@@ -161,7 +161,7 @@
                     } ).draw();
 
                     // Add event listener for opening and closing details
-                    $('#example tbody').on('click', 'button', function () {
+                    $('#example tbody').unbind().on('click', 'button', function () {
                         var tr = $(this).closest('tr');
                         var row = table.row( tr );
                 
@@ -246,29 +246,27 @@
                     } );
                 } ).draw();
 
-                // On click button on the table for details
-                $('.details-button').click('button', function () {
-                    let data = table.row( $(this).parents('tr') ).data();
-
-                    var tr = $(this).closest('tr');
-                    var row = table.row( tr );
-            
-                    if ( row.child.isShown() ) {
-                        
-                        // This row is already open - close it
-                        $('div.slider', row.child()).slideUp( function () {
-                            row.child.hide();
-                            tr.removeClass('shown');
-                        } );
-                    }
-                    else {
-                        // Open this row
-                        row.child( format(row.data())).show();
-                        tr.addClass('shown');
-                        
-                        $('div.slider', row.child()).fadeTo();
-                    }
-                });
+                // Add event listener for opening and closing details
+                $('#example tbody').unbind().on('click', 'button', function () {
+                        var tr = $(this).closest('tr');
+                        var row = table.row( tr );
+                
+                        if ( row.child.isShown() ) {
+                            
+                            // This row is already open - close it
+                            $('div.slider', row.child()).slideUp( function () {
+                                row.child.hide();
+                                tr.removeClass('shown');
+                            } );
+                        }
+                        else {
+                            // Open this row
+                            row.child( format(row.data())).show();
+                            tr.addClass('shown');
+                            
+                            $('div.slider', row.child()).fadeTo();
+                        }
+                    } );
 
                 },
                 complete: function(){

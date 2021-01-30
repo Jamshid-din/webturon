@@ -40,7 +40,7 @@
                             <div class="panel">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#faqs_{{$key}}"><i class="fa fa-{{ ($key == 0) ? 'plus':'minus'}}"></i> {{ $value->title_uz }} </a>
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#faqs_{{$key}}"><i class="fa fa-minus"></i> {{ $value->title_uz }} </a>
                                     </h4>
                                 </div>
                                 
@@ -119,7 +119,7 @@
                     } ).draw();
 
                     // On click button on the table
-                    $('#example tbody').on( 'click', 'button', function () {
+                    $('#example tbody').unbind().on( 'click', 'button', function () {
                         let data1 = table.row( $(this).parents('tr') ).data();
 
                         var tr = $(this).closest('tr');
@@ -204,13 +204,13 @@
                         } );
                     } ).draw();
 
-                    // On click button on the table for details
-                    $('.details-button').click('button', function () {
-                        let data2 = table.row( $(this).parents('tr') ).data();
+                    // On click button on the table
+                    $('#example tbody').unbind().on( 'click', 'button', function () {
+                        let data1 = table.row( $(this).parents('tr') ).data();
 
                         var tr = $(this).closest('tr');
                         var row = table.row( tr );
-
+                
                         if ( row.child.isShown() ) {
                             
                             // This row is already open - close it
