@@ -2,6 +2,7 @@
 
 @section('content')
   <!-- Navbar -->
+  <script src="{{ asset('material') }}/js/plugins/bootstrap-selectpicker.js"></script>
 
   <div class="content">
     @if (count($errors) > 0)
@@ -45,9 +46,9 @@
                     <li class="nav-item">
                         <a class="nav-link text-white active" id="pills-menu-tab" href="{{ route('admin-menu-archive') }}">Parent Menu </a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link text-white" id="pills-submenu-tab" href="{{ route('admin-menu-archive-sub') }}">Sub Menu</a>
-                    </li>
+                    </li> -->
                 </ul>                
                 <p class="card-category"> <!-- Here you can manage archive docuements --></p>
               </div>
@@ -71,6 +72,7 @@
                         <thead class=" text-primary">
                         <tr>
                             <th> # </th>
+                            <th> Parent </th>
                             <th> Title </th>
                             <th> Title Ru </th>
                             <th> Sort </th>
@@ -82,6 +84,7 @@
                             @foreach($models as $key => $model)
                             <tr id="row_{{ $model->id}}">
                             <td>{{ $key+1}}</td>
+                            <td>{{ ($model->parent_id != 0) ? $model->parents($model->parent_id) : 'no parent'}}</td>
                             <td>{{ $model->title_uz }}</td>
                             <td>{{ $model->title_ru }}</td>
                             <td>{{ $model->sort }}</td>
@@ -149,7 +152,19 @@
                 <div class="col-md-10 m-auto">
                   <form class="form" method="POST" action="{{ route('store-arch-menu') }}" enctype="multipart/form-data">
                     @csrf
-
+                    <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
+                          </div>
+                          <select class="form-control" data-style="btn btn-link" id="selectDep" name="parent" data-live-search="true">
+                          <option value="" disabled selected> Select Parent Menu </option>
+                            @foreach($parent as $value)
+                              <option value="{{ $value->id }}"> {{ $value->parents($value->id) }}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                      </div>
                     <div class="form-group">
                       <div class="input-group">
                         <div class="input-group-prepend">
@@ -235,6 +250,23 @@
                 <div class="col-md-10 m-auto">
                   <form id="searchForm" class="form" method="POST" action="{{ route('admin-menu-archive') }}">
                     @csrf
+                    <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
+                          </div>
+                          <select class="form-control" data-style="btn btn-link" id="parentMenu" name="parent" data-live-search="true">
+                          <option value="" disabled selected> Select Parent Menu </option>
+                            @foreach($parent as $value)
+                              @if($value->id == ($parentId??''))
+                                <option value="{{ $value->id }}" selected> {{ $value->parents($value->id) }} </option>
+                              @else
+                                <option value="{{ $value->id }}"> {{ $value->parents($value->id)  }} </option>
+                              @endif
+                            @endforeach
+                          </select>
+                        </div>
+                      </div>
                       <div class="form-group">
                         <div class="input-group">
                           <div class="input-group-prepend">
@@ -314,7 +346,18 @@
                   <form class="form" method="POST" action="{{ route('update-arch-menu') }}" enctype="multipart/form-data">
                     @csrf
                       <input type="text" id="menu_id" name="id" hidden required>
-
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
+                          </div>
+                          <select class="form-control" data-style="btn btn-link" id="updateParentMenu" name="parent" required  data-live-search="true">
+                            @foreach($parent as $value)
+                              <option value="{{$value->id}}"> {{ $value->parents($value->id) }} </option>
+                            @endforeach
+                          </select>
+                        </div>
+                      </div>
                       <div class="form-group">
                         <div class="input-group">
                           <div class="input-group-prepend">
@@ -447,7 +490,11 @@
 
 <script>
   // Token
+  $(document).ready(function(){
+
   var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+  $('select').selectpicker()
 
   $('.deleteLink').click(function(){
     let itemId = $(this).data('id')
@@ -468,7 +515,7 @@
           $('#responseModal').modal('toggle')
           $('#responseModal .modal-body p').text(result)
           $('#row_'+itemId).remove()
-
+          location.reload(1500);
           setTimeout(function() {$('#responseModal').modal('hide')}, 1500)
         },
         error: function(){
@@ -510,7 +557,8 @@
         }else{
           $('#updatePassiveStaus').prop('checked', true)
         }
-
+        $('#updateParentMenu').selectpicker('val',oldMenu.parent_id);
+        $('#updateParentMenu').selectpicker('refresh');
       },
       error: function(error){
         console.log(error.statusText)
@@ -518,7 +566,7 @@
     })
 
   })
-
+  })
   // End of Ready Function
 
   // Clear Saerch Filter
@@ -527,6 +575,7 @@
     $("#searchTitle_ru").val('');
     $("#searchStatusActive").prop('checked', false);
     $("#searchStatusPassive").prop('checked', false);
+    $('#parentMenu').selectpicker('val', '');
 
   })
 </script>

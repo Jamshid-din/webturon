@@ -22,14 +22,14 @@ class DocumentController extends Controller
     {
   
         $menu = ArchMenuList::where('role', '0')->where('status', 1)->orderBy('sort', 'ASC')->get();
-        $sub_menu = SubArchMenuList::whereHas('archMenu', function($query){
-            $query->where('role', 0);
-        })
-        ->where('status', 1)
-        ->orderBy('id', 'ASC')
-        ->get();
+        // $sub_menu = SubArchMenuList::whereHas('archMenu', function($query){
+        //     $query->where('role', 0);
+        // })
+        // ->where('status', 1)
+        // ->orderBy('id', 'ASC')
+        // ->get();
  
-        return view('components.docs',compact('menu', 'sub_menu'));
+        return view('components.docs',compact('menu'));
     }
 
     public function fetchData(Request $request){

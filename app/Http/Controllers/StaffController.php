@@ -21,16 +21,14 @@ class StaffController extends Controller
     public function index()
     {
       
-        $menu = ArchMenuList::where('role', 1)->where('status', 1)->orderBy('sort', 'ASC')->get();
-        $sub_menu = SubArchMenuList::whereHas('archMenu', function($query){
-            $query->where('role', 1);
-        })
+        $menu = ArchMenuList::where('parent_id', 0)->where('role', 1)->where('status', 1)->orderBy('sort', 'ASC')->get();
+        $sub_menu = ArchMenuList::where('parent_id', '>', 0)->where('role', 1)
         ->where('status', 1)
         ->orderBy('id', 'ASC')
         ->get();
 
         
-        return view('components.staff', compact('menu','sub_menu'));
+        return view('components.staff', compact('menu', 'sub_menu'));
     }
 
     public function fetchData(Request $request){

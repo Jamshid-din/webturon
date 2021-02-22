@@ -46,11 +46,11 @@
                                 
                                 <div id="faqs_{{$key}}" class="panel-collapse {{ ($key == 0) ? 'in':'collapse'}}">
                                 @foreach($sub_menu as $k => $sub_value)
-                                    @if($sub_value->arch_menu_id === $value->id)
+                                    @if($sub_value->parent_id === $value->id)
 
                                         <p>
                                             <i class="fa fa-bars"></i>
-                                            <a href="#" class="get-sub" data-id="{{ $sub_value->id }}">  {{ $sub_value->title_uz }} </span>
+                                            <a href="#" class="get-sub" data-id="{{ $sub_value->parent_id }}">  {{ $sub_value->title_uz }} </span>
                                         </p>
 
                                     @endif

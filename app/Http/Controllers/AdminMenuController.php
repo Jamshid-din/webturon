@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 use App\PersonalList;
 use App\ArchMenuList;
-use App\SubArchMenuList;
 use App\DepartList;
 use App\SubDepartList;
 use App\DocumentList;
@@ -24,6 +23,8 @@ class AdminMenuController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+     public bool $isFinish = false;
+
     // Archive Menu
     public function archIndex(Request $request){
 
@@ -33,15 +34,19 @@ class AdminMenuController extends Controller
         } 
 
         $menuType = 'parent';
+        $parent =  ArchMenuList::where('role', 0)->orderBy('created_at', 'DESC')->get();
 
         if($request->input()) {
 
+            $parentId   = $request->input(['parent']);
             $title_uz   = $request->input(['title_uz']);
             $title_ru   = $request->input(['title_ru']);
             $sort       = $request->input(['sort']);
             $status     = $request->input(['status']);
 
-            $search = ArchMenuList::where('role', 0)->orderBy('sort', 'asc');
+            $search = ArchMenuList::where('role', 0)->orderBy('created_at', 'DESC');
+
+            if($parentId)       $search->where('parent_id', $parentId);
 
             if($title_uz) $search->where('title_uz', 'like', '%'. $title_uz .'%');
 
@@ -52,19 +57,23 @@ class AdminMenuController extends Controller
             $models = $search->paginate(10);
 
             $models->appends ( array (
+                'parent'    => $parentId,
                 'title_uz'  => $title_uz,
                 'title_ru'  => $title_ru,
                 'sort'      => $sort,
                 'status'    => $status
             ));
 
-
-            return view('admin.menus.menu-archive.index',compact('models', 'menuType','title_uz','title_ru','sort','status'));
+            return view('admin.menus.menu-archive.index',compact('models', 'menuType', 'parent', 'parentId', 'title_uz','title_ru','sort','status', 'parent'));
         } 
         else{
-            $models = ArchMenuList::where('role', 0)->orderBy('sort', 'asc')->paginate(10);
+            $models =  ArchMenuList::where('role', 0)->orderBy('created_at', 'DESC')->paginate(10);
 
-            return view('admin.menus.menu-archive.index',compact('models', 'menuType'));
+            // dd($parent);
+            // foreach ($parent as $key => $value) {
+            //     print_r($value."<br>");
+            // }die;
+            return view('admin.menus.menu-archive.index',compact('models', 'menuType', 'parent'));
         }
 
 
@@ -78,7 +87,8 @@ class AdminMenuController extends Controller
         } 
 
         $menuType = 'child';
-        $parent = ArchMenuList::where('role', 0)->orderBy('sort', 'ASC')->get();
+        $parent = ArchMenuList::where('role', 0)->where('parent_id', 0)->orderBy('sort', 'ASC')->get();
+        
         if($request->input()) {
             
             $parentId   = $request->input(['parent']);
@@ -86,20 +96,25 @@ class AdminMenuController extends Controller
             $title_ru   = $request->input(['title_ru']);
             $sort       = $request->input(['sort']);
             $status     = $request->input(['status']);
+            $role     = $request->input(['role']);
+            $sort     = $request->input(['sort']);
 
             $currentMenu = ArchMenuList::where('role', 0)->where('id', $parentId)->first();
 
-            $search = SubArchMenuList::whereHas('archMenu', function($query){
-                $query->where('role', 0);
-            });
+            $search = ArchMenuList::where('role', 0);
 
-            if($parentId)       $search->where('arch_menu_id', $parentId);
+            if($parentId)       $search->where('parent_id', $parentId);
 
             if($title_uz)       $search->where('title_uz', 'like', '%'. $title_uz .'%');
 
             if($title_ru)       $search->where('title_ru', 'like', '%'.$title_ru.'%');
 
             if($status != null) $search->where('status', $status);
+
+            if($role != null) $search->where('role', $role);
+
+            if($sort != null) $search->where('sort', $status);
+
 
             $models = $search->orderBy('created_at', 'DESC')->paginate(10);
 
@@ -108,16 +123,15 @@ class AdminMenuController extends Controller
                 'title_uz'  => $title_uz,
                 'title_ru'  => $title_ru,
                 'sort'      => $sort,
-                'status'    => $status
+                'status'    => $status,
+                'role'      => $role
             ));
             
-            return view('admin.menus.menu-archive.index-sub',compact('models','menuType','currentMenu','parent','parentId','title_uz','title_ru','sort','status'));
+            return view('admin.menus.menu-archive.index-sub',compact('models','menuType','currentMenu','parent','parentId','title_uz','title_ru','sort','status', 'role'));
 
         }
 
-        $models = SubArchMenuList::whereHas('archMenu', function($query){
-            $query->where('role', 0);
-        })
+        $models = ArchMenuList::where('role', 0)
         ->orderBy('created_at', 'DESC')
         ->paginate(10); 
 
@@ -134,6 +148,7 @@ class AdminMenuController extends Controller
         ]);
 
         $new = new ArchMenuList();
+        $new->parent_id = $request->input("parent") ? $request->input("parent") : 0;
         $new->title_uz = $request->input('title_uz');
         $new->title_ru = $request->input('title_ru');
         $new->sort     = $request->input('sort');
@@ -153,11 +168,13 @@ class AdminMenuController extends Controller
             'status'        => 'required',
         ]);
 
-        $new = new SubArchMenuList();
-        $new->arch_menu_id  = $request->input("parent");
+        $new = new ArchMenuList();
+        $new->parent_id     = $request->input("parent");
         $new->title_uz      = $request->input("title_uz");
         $new->title_ru      = $request->input("title_ru");
         $new->status        = $request->input("status");
+        $new->role          = 0;
+        $new->sort          = 0; 
         $new->save();
 
         return back()->with('success', 'Successfully stored');
@@ -179,21 +196,29 @@ class AdminMenuController extends Controller
     public function archMenuUpdate(Request $request){
 
         $this->validate($request, [
+            'parent'    => 'required',
             'title_uz'  => 'required',
             'title_ru'  => 'required',
             'sort'      => 'required',
             'status'    => 'required',
         ]);
 
-        $id = $request->input('id');
 
+        
+        $id = $request->input('id');
+        
+        if($id == $request->input('parent')){
+            return back()->with('error', 'Child can not be child of itself');
+        }
+        
         $update = ArchMenuList::find($id);
 
         $update->update([
             'title_uz'  => $request->input('title_uz'),
             'title_ru'  => $request->input('title_ru'),
             'sort'      => $request->input('sort'),
-            'status'    => $request->input('status')
+            'status'    => $request->input('status'),
+            'parent_id'  => $request->input('parent'),
         ]);
         
         return back()->with('success', 'Successfully updated');
@@ -227,71 +252,105 @@ class AdminMenuController extends Controller
     public function archMenuDelete($id){
 
         $model = ArchMenuList::findOrFail($id);
-        $sub_model = SubArchMenuList::where('arch_menu_id', $id)->get();
-        $doc_model = DocumentList::where('doc_arch_menu_id', $id)->get();
+        $sub_model = ArchMenuList::where('parent_id', $id)->get();
+        $doc_model = DocumentList::where('doc_menu_id', $id)->get();
 
-        foreach ($doc_model as $key => $value) {
-            $scanFile = DocFile::find($value->doc_file_id);
-            $electronicFile = DocFile::find($value->doc_e_file_id);
+        $arr = [];
+        $menus = ArchMenuList::where('role', 0)->get();
+
+        if($model->parent_id == 0) {
+            foreach ($doc_model as $key => $value) {
+                $scanFile = DocFile::find($value->doc_file_id);
+                $electronicFile = DocFile::find($value->doc_e_file_id);
+                
+                if($scanFile){
+                    $file_exists = Storage::disk('public')->exists( '/archive/'.$scanFile->doc_hash );
+                    if($file_exists){
+                        Storage::delete('public/archive/'.$scanFile->doc_hash);
+                    }
+                    $scanFile->delete();   
+                }
+                if($electronicFile){
+                    $file_exists = Storage::disk('public')->exists( '/archive/'.$electronicFile->doc_hash );
+                    if($file_exists){
+                        Storage::delete('public/archive/'.$electronicFile->doc_hash);
+                    }
+                    $electronicFile->delete();   
+                }
+                if($doc_model->count()) DocumentList::where('doc_menu_id', $id)->delete();
+                // if($sub_model->count()) ArchMenuList::where('parent_id', $id)->delete();
+            }
+        } else {
+            $parent_id = $model->parent_id;
+            $id = $model->id;
+            $key2 = 0;
+            while($parent_id != 0) {
+                foreach ($menus as $key => $value) {
+                    if($id == $value->parent_id) {
+                        $id = $value->id;
+                        $parent_id = $value->parent_id;
+                        $arr[] = $id;
+                        break;
+                    } 
+                    $key2 = $key;
+                }
+                if($key2 + 1 == $menus->count()) {
+                    break;
+                }
+            }
+
+
+            $doc_lists = DocumentList::whereIn('doc_menu_id', $arr)->get();
             
-            if($scanFile){
-                $file_exists = Storage::disk('public')->exists( '/archive/'.$scanFile->doc_hash );
-                if($file_exists){
-                    Storage::delete('public/archive/'.$scanFile->doc_hash);
-                }
-                $scanFile->delete();   
+            $arrDocFile = [];
+            $arrDocEFile = [];
+
+            foreach ($doc_lists as $key => $value) {
+                if($value->doc_file_id) $arrDocFile[] = $value->doc_file_id;
+                if($value->doc_e_file_id) $arrDocEFile[] = $value->doc_e_file_id;
             }
-            if($electronicFile){
-                $file_exists = Storage::disk('public')->exists( '/archive/'.$electronicFile->doc_hash );
+
+            $doc_files = DocFile::whereIn('id', $arrDocFile)->get();
+            $doc_e_files = DocFile::whereIn('id', $arrDocEFile)->get();
+            
+            foreach ($doc_files as $key => $value) {
+                
+                $file_exists = Storage::disk('public')->exists( '/archive/'.$value->doc_hash );
                 if($file_exists){
-                    Storage::delete('public/archive/'.$electronicFile->doc_hash);
+                    Storage::delete('public/archive/'.$value->doc_hash);
                 }
-                $electronicFile->delete();   
+                DocFile::where('id', $value->id)->delete();
             }
-            if($doc_model->count()) DocumentList::where('doc_arch_menu_id', $id)->delete();
-            if($sub_model->count()) SubArchMenuList::where('arch_menu_id', $id)->delete();
+
+            foreach ($doc_e_files as $key => $value) {
+                    $file_exists = Storage::disk('public')->exists( '/archive/'.$value->doc_hash );
+                    if($file_exists){
+                        Storage::delete('public/archive/'.$value->doc_hash);
+                    }
+                    DocFile::where('id', $value->id)->delete();
+            }
+
+            DocumentList::whereIn('doc_menu_id', $arr)->delete();
+            ArchMenuList::whereIn('id', $arr)->delete();
         }
+
+
+
         $model->delete();
 
-        return response('The record deleted successfully', 200);
-    }
-
-    public function archSubDelete($id){
-
-        $model = SubArchMenuList::findOrFail($id);
-        $doc_sub_model = DocumentList::where('doc_sub_arch_menu_id', $id)->get();
-
-        foreach ($doc_sub_model as $key => $value) {
-
-            $scanFile = DocFile::find($value->doc_file_id);
-            $electronicFile = DocFile::find($value->doc_e_file_id);
-            
-            if($scanFile){
-                $file_exists = Storage::disk('public')->exists( '/archive/'.$scanFile->doc_hash );
-                if($file_exists){
-                    Storage::delete('public/archive/'.$scanFile->doc_hash);
-                }
-                $scanFile->delete();   
-            }
-            if($electronicFile){
-                $file_exists = Storage::disk('public')->exists( '/archive/'.$electronicFile->doc_hash );
-                if($file_exists){
-                    Storage::delete('public/archive/'.$electronicFile->doc_hash);
-                }
-                $electronicFile->delete();   
-            }
-
-            if($doc_sub_model->count()) DocumentList::where('doc_sub_arch_menu_id', $id)->delete();
-        }
-
-        $model->delete();
-        
-        
         return response('The record deleted successfully', 200);
     }
 
     public function getArchSubMenu($id){
-        $sub_menu = SubArchMenuList::where('arch_menu_id', $id)->orderBy('id', 'ASC')->get();
+        
+        $sub_menu = ArchMenuList::where('parent_id', $id)->orderBy('id', 'ASC')->get();
+
+        return response()->json(['sub_menu' => $sub_menu]);
+    }    
+
+    public function getArchParentSubMenu($parent_id){
+        
+        $sub_menu = ArchMenuList::find($parent_id)->orderBy('id', 'ASC')->get();
 
         return response()->json(['sub_menu' => $sub_menu]);
     }
@@ -443,19 +502,15 @@ class AdminMenuController extends Controller
 
             $currentMenu = ArchMenuList::where('role', 1)->where('id', $parentId)->first();
 
-            $search = SubArchMenuList::whereHas('archMenu', function($query){
-                $query->where('role', 1);
-            });
+            if($parentId)       $currentMenu->where('arch_menu_id', $parentId);
 
-            if($parentId)       $search->where('arch_menu_id', $parentId);
+            if($title_uz)       $currentMenu->where('title_uz', 'like', '%'. $title_uz .'%');
 
-            if($title_uz)       $search->where('title_uz', 'like', '%'. $title_uz .'%');
+            if($title_ru)       $currentMenu->where('title_ru', 'like', '%'.$title_ru.'%');
 
-            if($title_ru)       $search->where('title_ru', 'like', '%'.$title_ru.'%');
+            if($status != null) $currentMenu->where('status', $status);
 
-            if($status != null) $search->where('status', $status);
-
-            $models = $search->orderBy('created_at', 'DESC')->paginate(10);
+            $models = $currentMenu->orderBy('created_at', 'DESC')->paginate(10);
 
             $models->appends ( array (
                 'parent'    => $parentId,
@@ -469,9 +524,7 @@ class AdminMenuController extends Controller
 
         }
 
-        $models = SubArchMenuList::whereHas('archMenu', function($query){
-            $query->where('role', 1);
-        })
+        $models = ArchMenuList::where('role', 1)
         ->orderBy('created_at', 'DESC')
         ->paginate(10); 
 

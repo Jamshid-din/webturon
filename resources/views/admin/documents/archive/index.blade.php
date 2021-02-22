@@ -159,13 +159,13 @@
                       <select class="form-control" data-style="btn btn-link selectDep" id="selectDep" name="menu_id" virtualScroll="true" data-live-search="true" required>
                         <option value="" disabled selected>Select Parent Menu</option>
                         @foreach($menu_list as $value)
-                          <option value="{{ $value->id }}"> {{ $value->title_uz}} </option>
+                          <option value="{{ $value->id }}"> {{ $value->parents($value->id) }} </option>
                         @endforeach
                       </select>
                     </div>
                   </div>
 
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
@@ -174,7 +174,7 @@
                         <option value="" disabled selected>Select Sub Menu</option>
                       </select>
                     </div>
-                  </div>
+                  </div> -->
 
                   <div class="form-group form-file-upload form-file-simple">
                     <div class="input-group">
@@ -257,36 +257,30 @@
                             <div class="input-group-prepend">
                               <div class="input-group-text"><i class="material-icons">menu</i></div>
                             </div>
-                            <select class="form-control" data-style="btn btn-link selectDep" id="searchDep" name="menu_id" virtualScroll="true" data-live-search="true">
-                              <option value="" disabled selected>Select Parent Menu</option>
+                            <select class="form-control" data-style="btn btn-link selectDep" id="searchDep" name="menu_id" virtualScroll="true" data-live-search="true">  
+                              <option value="" disabled selected> Select Parent Menu </option>
                               @foreach($menu_list as $value)
                                 @if($value->id == ($menu_id??''))
-                                  <option value="{{ $value->id }}" selected> {{ $value->title_uz }} </option>
+                                  <option value="{{ $value->id }}" selected> {{ $value->parents($value->id) }} </option>
                                 @else
-                                  <option value="{{ $value->id }}"> {{ $value->title_uz }} </option>
+                                  <option value="{{ $value->id }}"> {{ $value->parents($value->id)  }} </option>
                                 @endif
                               @endforeach
                             </select>
                           </div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                           <div class="input-group">
                             <div class="input-group-prepend">
                               <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
                             </div>
                             <select class="form-control" data-style="btn btn-link" id="searchSubDep" name="sub_menu_id" data-live-search="true">
                               <option value="" disabled selected>Select Sub Menu</option>
-                              @foreach($sub_menu_list as $value)
-                                @if($value->id == ($sub_menu_id??''))
-                                  <option value="{{ $value->id }}" selected> {{ $value->title_uz }} </option>
-                                @else
-                                  <option value="{{ $value->id }}"> {{ $value->title_uz }} </option>
-                                @endif
-                              @endforeach
+                             
                             </select>
                           </div>
-                        </div>
+                        </div> -->
 
 
                           <div class="form-group">
@@ -392,13 +386,15 @@
                         <div class="input-group-prepend">
                           <div class="input-group-text"><i class="material-icons">menu</i></div>
                         </div>
-                        <select class="form-control" data-style="btn btn-link" id="updateDep" name="menu_id" data-live-search="true" required>
-                          <option id="defaultMenu" value="" disabled selected>Select Parent Menu</option>
-                        </select>
+                        <select class="form-control" data-style="btn btn-link" id="updateParentMenu" name="menu_id" required  data-live-search="true">
+                            @foreach($menu_list as $value)
+                              <option value="{{$value->id}}"> {{ $value->parents($value->id) }} </option>
+                            @endforeach
+                          </select>
                       </div>
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
@@ -407,7 +403,7 @@
                           <option id="defaultSubMenu" value="" disabled selected>Select Sub Menu</option>
                         </select>
                       </div>
-                    </div>
+                    </div> -->
 
                     <div class="form-group form-file-upload form-file-simple">
                       <div class="input-group">
@@ -539,94 +535,94 @@
 
     $('select').selectpicker()
 
-    // On adding document
-    $('#selectDep').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+    // // On adding document
+    // $('#selectDep').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 
-      let optionValue = $(this).val()
-      $('#selectSubDep option').remove()
-      $.ajax({
-        url: '/admin-menu-archive-sub/fetch-sub/'+ optionValue,
-        type: 'get',
-        success: function(result){
+    //   let optionValue = $(this).val()
+    //   $('#selectSubDep option').remove()
+    //   $.ajax({
+    //     url: '/admin-menu-archive-sub/fetch-sub/'+ optionValue,
+    //     type: 'get',
+    //     success: function(result){
 
-          let sub_menu = result['sub_menu']
-          let newOptions = '<option id="defaultMenu" value="" disabled selected>Select Sub Menu</option>'
+    //       let sub_menu = result['sub_menu']
+    //       let newOptions = '<option id="defaultMenu" value="" disabled selected>Select Sub Menu</option>'
 
-          $.each(sub_menu, function(index, val){
-            newOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
-          })
+    //       $.each(sub_menu, function(index, val){
+    //         newOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
+    //       })
 
-          $('#selectSubDep').append(newOptions).selectpicker('refresh')
+    //       $('#selectSubDep').append(newOptions).selectpicker('refresh')
 
-        },
-        error: function(e){
-          console.log(e)
-        }
-      })
+    //     },
+    //     error: function(e){
+    //       console.log(e)
+    //     }
+    //   })
 
-    })
+    // })
 
     // On searching document
-    $('#searchDep').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+    // $('#searchDep').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 
-      let optionValue = $(this).val()
-      $('#searchSubDep option').remove()
-      $.ajax({
-        url: '/admin-menu-archive-sub/fetch-sub/'+ optionValue,
-        type: 'get',
-        success: function(result){
+    //   let optionValue = $(this).val()
+    //   $('#searchSubDep option').remove()
+    //   $.ajax({
+    //     url: '/admin-menu-archive-sub/fetch-sub/'+ optionValue,
+    //     type: 'get',
+    //     success: function(result){
 
-          let sub_menu = result['sub_menu']
-          let newOptions = '<option id="defaultMenu" value="" disabled selected>Select Sub Menu</option>'
+    //       let sub_menu = result['sub_menu']
+    //       let newOptions = '<option id="defaultMenu" value="" disabled selected>Select Sub Menu</option>'
 
-          $.each(sub_menu, function(index, val){
-            newOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
-          })
+    //       $.each(sub_menu, function(index, val){
+    //         newOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
+    //       })
 
-          $('#searchSubDep').append(newOptions).selectpicker('refresh')
+    //       $('#searchSubDep').append(newOptions).selectpicker('refresh')
 
-        },
-        error: function(e){
-          console.log(e)
-        }
-      })
+    //     },
+    //     error: function(e){
+    //       console.log(e)
+    //     }
+    //   })
 
-    })
+    // })
 
-    // On updating document
-    $('#updateDep').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+    // // On updating document
+    // $('#updateDep').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
       
-      let optionValue = $(this).val()
-      let optionSubValue = $('#updateSubDep').val()
-      let optionSubText = $('#updateSubDep').text()
+    //   let optionValue = $(this).val()
+    //   let optionSubValue = $('#updateSubDep').val()
+    //   let optionSubText = $('#updateSubDep').text()
       
-      $('#updateSubDep option').remove()
+    //   $('#updateSubDep option').remove()
 
-      $('#updateSubDep').selectpicker('refresh')
-      $.ajax({
-        url: '/admin-menu-archive-sub/fetch-sub/'+ optionValue,
-        type: 'get',
-        success: function(result){
+    //   $('#updateSubDep').selectpicker('refresh')
+    //   $.ajax({
+    //     url: '/admin-menu-archive-sub/fetch-sub/'+ optionValue,
+    //     type: 'get',
+    //     success: function(result){
 
-          let sub_menu = result['sub_menu']
-          let newOptions = ''
+    //       let sub_menu = result['sub_menu']
+    //       let newOptions = ''
 
-          $.each(sub_menu, function(index, val){
-            if(val.id == optionSubValue){
-              newOptions += '<option value="'+val.id+'" selected>'+val.title_uz+'</option>'
-            }else{
-              newOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
-            }
-          })
-          $('#updateSubDep').append(newOptions)
-          $('#updateSubDep').selectpicker('refresh')
-          $('#updateSubDep').selectpicker('val', optionSubValue)
-          $('#updateSubDep').selectpicker('refresh')
+    //       $.each(sub_menu, function(index, val){
+    //         if(val.id == optionSubValue){
+    //           newOptions += '<option value="'+val.id+'" selected>'+val.title_uz+'</option>'
+    //         }else{
+    //           newOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
+    //         }
+    //       })
+    //       $('#updateSubDep').append(newOptions)
+    //       $('#updateSubDep').selectpicker('refresh')
+    //       $('#updateSubDep').selectpicker('val', optionSubValue)
+    //       $('#updateSubDep').selectpicker('refresh')
 
-        }
-      })
+    //     }
+    //   })
 
-    })
+    // })
 
     // Delete list item
     $(".deleteLink").click( function () {
@@ -751,6 +747,9 @@
           
           $('select').selectpicker('refresh');
           $('select').selectpicker('render');
+
+          $('#updateParentMenu').selectpicker('val',oldArch.doc_menu_id);
+          $('#updateParentMenu').selectpicker('refresh');
         },
         error: function(error){
           console.log(error)
