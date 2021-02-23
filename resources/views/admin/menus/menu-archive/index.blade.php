@@ -509,14 +509,24 @@
         type: 'delete',
 
         success: function(result) {
-          $('#delete').modal('toggle')
-          $('#responseModal .modal-title').text('Success')
-          $('#responseModal .modal-footer button').removeClass('btn-danger').addClass('btn-success')
-          $('#responseModal').modal('toggle')
-          $('#responseModal .modal-body p').text(result)
-          $('#row_'+itemId).remove()
-          location.reload(1500);
-          setTimeout(function() {$('#responseModal').modal('hide')}, 1500)
+          let type = result["success"]
+          let message = result["message"]
+          if(type){
+            $('#delete').modal('toggle')
+            $('#responseModal .modal-title').text('Success')
+            $('#responseModal .modal-footer button').removeClass('btn-danger').addClass('btn-success')
+            $('#responseModal').modal('toggle')
+            $('#responseModal .modal-body p').text(message)
+            $('#row_'+itemId).remove()
+          } else {
+            $('#delete').modal('toggle')
+            $('#responseModal .modal-title').text('Failed')
+            $('#responseModal .modal-footer button').removeClass('btn-success').addClass('btn-danger')
+            $('#responseModal').modal('toggle')
+            $('#responseModal .modal-body p').text(message)
+          }
+          // location.reload(1500);
+          // setTimeout(function() {$('#responseModal').modal('hide')}, 1500)
         },
         error: function(){
           $('#delete').modal('toggle')

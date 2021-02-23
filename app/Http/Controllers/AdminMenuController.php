@@ -254,90 +254,23 @@ class AdminMenuController extends Controller
         $model = ArchMenuList::findOrFail($id);
         $sub_model = ArchMenuList::where('parent_id', $id)->get();
         $doc_model = DocumentList::where('doc_menu_id', $id)->get();
-
+        $canBeDeleted = true;
         $arr = [];
         $menus = ArchMenuList::where('role', 0)->get();
 
-        if($model->parent_id == 0) {
-            foreach ($doc_model as $key => $value) {
-                $scanFile = DocFile::find($value->doc_file_id);
-                $electronicFile = DocFile::find($value->doc_e_file_id);
-                
-                if($scanFile){
-                    $file_exists = Storage::disk('public')->exists( '/archive/'.$scanFile->doc_hash );
-                    if($file_exists){
-                        Storage::delete('public/archive/'.$scanFile->doc_hash);
-                    }
-                    $scanFile->delete();   
-                }
-                if($electronicFile){
-                    $file_exists = Storage::disk('public')->exists( '/archive/'.$electronicFile->doc_hash );
-                    if($file_exists){
-                        Storage::delete('public/archive/'.$electronicFile->doc_hash);
-                    }
-                    $electronicFile->delete();   
-                }
-                if($doc_model->count()) DocumentList::where('doc_menu_id', $id)->delete();
+        $childCheck = ArchMenuList::where('parent_id', $model->id)->get();
+
+        if(!($childCheck->count())) {
+            $docCheck = DocumentList::where('doc_menu_id', $model->id)->get();            
+            if(!($docCheck->count())) {
+                $model->delete();
+                return response()->json(['success' => true, 'message'=>'Successfully deleted!']);
+            } else {
+                return response()->json(['success' => false, 'message'=>'Failed to delete. It has documents']);
             }
         } else {
-            $parent_id = $model->parent_id;
-            $id = $model->id;
-            $key2 = 0;
-            while($parent_id != 0) {
-                foreach ($menus as $key => $value) {
-                    if($id == $value->parent_id) {
-                        $id = $value->id;
-                        $parent_id = $value->parent_id;
-                        $arr[] = $id;
-                        break;
-                    } 
-                    $key2 = $key;
-                }
-                if($key2 + 1 == $menus->count()) {
-                    break;
-                }
-            }
-
-
-            $doc_lists = DocumentList::whereIn('doc_menu_id', $arr)->get();
-            
-            $arrDocFile = [];
-            $arrDocEFile = [];
-
-            foreach ($doc_lists as $key => $value) {
-                if($value->doc_file_id) $arrDocFile[] = $value->doc_file_id;
-                if($value->doc_e_file_id) $arrDocEFile[] = $value->doc_e_file_id;
-            }
-
-            $doc_files = DocFile::whereIn('id', $arrDocFile)->get();
-            $doc_e_files = DocFile::whereIn('id', $arrDocEFile)->get();
-            
-            foreach ($doc_files as $key => $value) {
-                
-                $file_exists = Storage::disk('public')->exists( '/archive/'.$value->doc_hash );
-                if($file_exists){
-                    Storage::delete('public/archive/'.$value->doc_hash);
-                }
-                DocFile::where('id', $value->id)->delete();
-            }
-
-            foreach ($doc_e_files as $key => $value) {
-                    $file_exists = Storage::disk('public')->exists( '/archive/'.$value->doc_hash );
-                    if($file_exists){
-                        Storage::delete('public/archive/'.$value->doc_hash);
-                    }
-                    DocFile::where('id', $value->id)->delete();
-            }
-
-            DocumentList::whereIn('doc_menu_id', $arr)->delete();
-            ArchMenuList::whereIn('id', $arr)->delete();
+            return response()->json(['success' => false, 'message'=>'Failed to delete. It has child menus']);
         }
-
-
-
-        $model->delete();
-
-        return response('The record deleted successfully', 200);
     }
 
     public function getArchSubMenu($id){

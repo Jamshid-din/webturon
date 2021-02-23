@@ -18,4 +18,8 @@ class DocumentList extends Model
         'status',
 
     ];
+
+    public function menu(){
+        return $this->hasOne(ArchMenuList::class, 'id', 'doc_menu_id');
+    }
 }

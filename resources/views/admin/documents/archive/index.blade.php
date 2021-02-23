@@ -62,6 +62,7 @@
                   <thead class=" text-primary">
                     <tr>
                       <th> # </th>
+                      <th class="w-25"> Parent </th>
                       <th class="w-75"> Title </th>
                       <th> Status</th>
                       <th> Creation date</th>
@@ -72,6 +73,7 @@
                       @foreach($models as $key => $model)
                       <tr id="row_{{ $model->id }}">
                         <td>{{ $key+1}}</td>
+                        <td>{{ (($model->menu->parent_id??0) != 0) ? $model->menu->parents($model->menu->parent_id??0) : '' }} {{ $model->menu->title_uz??''}}</td>
                         <td>{{ $model->doc_title }}</td>
                         <td>
                           @if($model->status)
