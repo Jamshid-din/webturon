@@ -833,12 +833,12 @@ class AdminMenuController extends Controller
                 'status'    => $status
             ));
 
-            return view('admin.menus.menu-soft.index',compact('models', 'menuType','title_uz','title_ru','sort','status'));
+            return view('admin.menus.menu-soft.index',compact('models','title_uz','title_ru','sort','status'));
         } 
         else{
             $models = SoftMenu::orderBy('sort', 'asc')->paginate(10);
 
-            return view('admin.menus.menu-soft.index',compact('models', 'menuType'));
+            return view('admin.menus.menu-soft.index',compact('models'));
         }
  
     }

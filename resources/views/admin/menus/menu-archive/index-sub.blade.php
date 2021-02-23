@@ -494,8 +494,6 @@
         success: function(result){
           let oldArchSub = result['oldSubMenu']
 
-          console.log(result['oldSubMenu'])
-
           // Reset form befor uploading old document info
           $("#updateForm").trigger('reset');
 

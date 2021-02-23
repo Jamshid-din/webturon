@@ -386,6 +386,9 @@
                         </div>
                         <select class="form-control" data-style="btn btn-link" id="updateDepart" name="depart_id" data-live-search="true">
                           <option id="defaultMenu" value="" disabled selected>Select Department</option>
+                          @foreach($parentDep as $value)
+                              <option value="{{ $value->id }}"> {{ $value->title_uz }} </option>
+                          @endforeach
                         </select>
                       </div>
                     </div>
@@ -535,6 +538,7 @@
     // Token
     let csrf_token = $('meta[name="csrf-token"]').attr('content')
 
+    let current_sub_dep = null
     $('select').selectpicker()
 
     // On adding 
@@ -613,7 +617,7 @@
           })
 
           $('#updateSubDepart').append(newOptions).selectpicker('refresh')
-          $('#updateSubDepart').selectpicker('val', optionSubValue)
+          $('#updateSubDepart').selectpicker('val', current_sub_dep.id)
 
         },
         error: function(e){
@@ -628,8 +632,8 @@
     $('.editLink').click(function() {
       
       // Clear options before call
-      $('#updateDepart option').remove().selectpicker('refresh')
-      $('#updateSubDepart option').remove().selectpicker('refresh')
+      // $('#updateDepart option').remove().selectpicker('refresh')
+      // $('#updateSubDepart option').remove().selectpicker('refresh')
 
       let itemId = $(this).data('id')
 
@@ -643,11 +647,12 @@
         success: function(result){
           let old             = result['oldIp']
           let current_dep     = result['dep']          
-          let current_sub_dep = result['sub_dep']
           let dep_list        = result['dep_list']  
           let sub_dep_list    = result['sub_dep_list']  
           let menuOptions     = ''
           let subMenuOptions  = ''
+          current_sub_dep = result['sub_dep']
+
           
           $('#ip_id').val(old.id)
           $('#update_fio').val(old.fio)
@@ -662,11 +667,7 @@
             subMenuOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
           })
 
-          $('#updateDepart').append(menuOptions)
-          $('#updateSubDepart').append(subMenuOptions)
-
           $('#updateDepart').selectpicker('val', current_dep.id)
-          $('#updateSubDepart').selectpicker('val', current_sub_dep.id)
 
           $('#updateSubDepart').selectpicker('refresh')
           $('#updateSubDepart').selectpicker('render')

@@ -74,7 +74,7 @@ class IpPhoneController extends Controller
         $childDep = SubDepartList::where('depart_id', $request->input(['depart_id']))->orderBy('sort', 'ASC')->get();
 
         if($request->input()) {
-            // dd($request->all());
+
             $depart_id      = $request->input(['depart_id']);
             $sub_depart_id  = $request->input(['sub_depart_id']);
             $fio            = $request->input(['fio']);
