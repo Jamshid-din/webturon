@@ -278,7 +278,6 @@ class AdminMenuController extends Controller
                     $electronicFile->delete();   
                 }
                 if($doc_model->count()) DocumentList::where('doc_menu_id', $id)->delete();
-                // if($sub_model->count()) ArchMenuList::where('parent_id', $id)->delete();
             }
         } else {
             $parent_id = $model->parent_id;

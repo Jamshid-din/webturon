@@ -24,22 +24,15 @@ class ArchMenuList extends Model
     public function parents($id)
     {
         $str = "";
-        $menus = ArchMenuList::where('role', 0)->get();
-        $key2 = 0;
 
         while($id != 0) {
-            foreach ($menus as $key => $value) {
-                if($id == $value->id) {
-                    $str = $value->title_uz.' -> '.$str;
-                    $id = $value->parent_id;
-                    break;
-                } 
-                $key2 = $key;
+            $query = ArchMenuList::where('id', $id)->first();
+            if($query){
+                $str = $query->title_uz.' -> '.$str;
+                $id  = $query->parent_id;
             }
-            if($key2 + 1 == $menus->count()) {
-                print_r('Not found');
-                break;
-            }
+            else   break;
+            
         }
         return $str;
     }
@@ -47,49 +40,32 @@ class ArchMenuList extends Model
     public function parentsPersonal($id)
     {
         $str = "";
-        $menus = ArchMenuList::where('role', 1)->get();
-        $key2 = 0;
 
         while($id != 0) {
-            foreach ($menus as $key => $value) {
-                if($id == $value->id) {
-                    $str = $value->title_uz.' -> '.$str;
-                    $id = $value->parent_id;
-                    break;
-                } 
-                $key2 = $key;
+            $query = ArchMenuList::where('id', $id)->first();
+
+            if($query){
+                $str = $query->title_uz.' -> '.$str;
+                $id  = $query->parent_id;
             }
-            if($key2 + 1 == $menus->count()) {
-                print_r('Not found');
-                break;
-            }
+            else    break;
+
         }
         return $str;
     }
 
     public function parentsInverseArr($id)
     {
-        $arr = [];
-        $menus = ArchMenuList::where('role', 0)->get();
         $checkId = ArchMenuList::where('id', $id)->get();
-        $key2 = 0;
 
-        while($checkId->parent_id != 0) {
-            foreach ($menus as $key => $value) {
-                if($id == $value->parent_id) {
-                    array_push($arr, $value->id);
-                    $id = $value->id;
-                    $checkId = ArchMenuList::where('id', $id)->get();
-                    break;
-                } 
-                $key2 = $key;
-            }
-            if($key2 + 1 == $menus->count()) {
-                print_r('Not found');
-                break;
-            }
+        $query = ArchMenuList::where('role', 0)->where('parent_id', $checkId->id)->get();
+        if($query){
+            return false;
         }
-        return $arr;
+        else{
+            return true;
+        } 
+
     }
 
 }
