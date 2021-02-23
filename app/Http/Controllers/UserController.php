@@ -102,4 +102,8 @@ class UserController extends Controller
         
         return response()->json(['success' => 'Successfully deleted!!!' ]);
     }
+    public function errorTemplate()
+    {
+        return view('pages.access');
+    }
 }

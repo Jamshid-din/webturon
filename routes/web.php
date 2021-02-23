@@ -36,6 +36,7 @@ Route::group(['middleware' => ['guest']], function () {
 
 });
 
+Route::get('/error/templates', 'UserController@errorTemplate');
 
 
 Auth::routes([
@@ -170,6 +171,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::prefix('/news')->group(function(){
 		Route::post('/search', 'NewsController@indexSearch')->name('news.search');
 	});
+	
+
 
 });
 
