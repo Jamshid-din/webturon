@@ -297,15 +297,19 @@ class AdminMenuController extends Controller
         } 
 
         $menuType = 'parent';
+        $parent =  ArchMenuList::where('role', 1)->orderBy('created_at', 'DESC')->get();
 
         if($request->input()) {
 
+            $parentId   = $request->input(['parent']);
             $title_uz   = $request->input(['title_uz']);
             $title_ru   = $request->input(['title_ru']);
             $sort       = $request->input(['sort']);
             $status     = $request->input(['status']);
 
             $search = ArchMenuList::where('role', 1)->orderBy('sort', 'asc');
+
+            if($parentId)       $search->where('parent_id', $parentId);
 
             if($title_uz) $search->where('title_uz', 'like', '%'. $title_uz .'%');
 
@@ -316,6 +320,7 @@ class AdminMenuController extends Controller
             $models = $search->paginate(10);
 
             $models->appends ( array (
+                'parent'    => $parentId,
                 'title_uz'  => $title_uz,
                 'title_ru'  => $title_ru,
                 'sort'      => $sort,
@@ -323,12 +328,12 @@ class AdminMenuController extends Controller
             ));
 
 
-            return view('admin.menus.menu-personal.index',compact('models', 'menuType','title_uz','title_ru','sort','status'));
+            return view('admin.menus.menu-personal.index',compact('models', 'parent', 'parentId', 'menuType','title_uz','title_ru','sort','status'));
         } 
         else{
             $models = ArchMenuList::where('role', 1)->orderBy('sort', 'asc')->paginate(10);
 
-            return view('admin.menus.menu-personal.index',compact('models', 'menuType'));
+            return view('admin.menus.menu-personal.index',compact('models', 'menuType', 'parent'));
         }
     }
 
@@ -342,6 +347,7 @@ class AdminMenuController extends Controller
         ]);
 
         $new = new ArchMenuList();
+        $new->parent_id = $request->input("parent") ? $request->input("parent") : 0;
         $new->title_uz = $request->input('title_uz');
         $new->title_ru = $request->input('title_ru');
         $new->sort     = $request->input('sort');
@@ -355,6 +361,7 @@ class AdminMenuController extends Controller
     public function personalUpdate(Request $request){
 
         $this->validate($request, [
+            'parent'    => 'required',
             'title_uz'  => 'required',
             'title_ru'  => 'required',
             'sort'      => 'required',
@@ -363,13 +370,18 @@ class AdminMenuController extends Controller
 
         $id = $request->input('id');
 
+        if($id == $request->input('parent')){
+            return back()->with('error', 'Child can not be child of itself');
+        }
+
         $update = ArchMenuList::find($id);
 
         $update->update([
             'title_uz'  => $request->input('title_uz'),
             'title_ru'  => $request->input('title_ru'),
             'sort'      => $request->input('sort'),
-            'status'    => $request->input('status')
+            'status'    => $request->input('status'),
+            'parent_id'  => $request->input('parent'),
         ]);
         
         return back()->with('success', 'Successfully updated');
@@ -378,34 +390,25 @@ class AdminMenuController extends Controller
     public function personalDelete($id){
 
         $model = ArchMenuList::findOrFail($id);
-        $sub_model = SubArchMenuList::where('arch_menu_id', $id)->get();
-        $personal_model = PersonalList::where('doc_arch_menu_id', $id)->get();
-        foreach ($personal_model as $key => $value) {
+        $sub_model = ArchMenuList::where('parent_id', $id)->get();
+        $doc_model = DocumentList::where('doc_menu_id', $id)->get();
+        $canBeDeleted = true;
+        $arr = [];
+        $menus = ArchMenuList::where('role', 0)->get();
 
-            $scanFile = DocFile::find($value->doc_file_id);
-            $electronicFile = DocFile::find($value->doc_e_file_id);
-            
-            if($scanFile){
-                $file_exists = Storage::disk('public')->exists( '/personal/'.$scanFile->doc_hash );
-                if($file_exists){
-                    Storage::delete('public/personal/'.$scanFile->doc_hash);
-                }
-                $scanFile->delete();   
+        $childCheck = ArchMenuList::where('parent_id', $model->id)->get();
+
+        if(!($childCheck->count())) {
+            $docCheck = DocumentList::where('doc_menu_id', $model->id)->get();            
+            if(!($docCheck->count())) {
+                $model->delete();
+                return response()->json(['success' => true, 'message'=>'Successfully deleted!']);
+            } else {
+                return response()->json(['success' => false, 'message'=>'Failed to delete. It has documents']);
             }
-            if($electronicFile){
-                $file_exists = Storage::disk('public')->exists( '/personal/'.$electronicFile->doc_hash );
-                if($file_exists){
-                    Storage::delete('public/personal/'.$electronicFile->doc_hash);
-                }
-                $electronicFile->delete();   
-            }
-            if($sub_model->count())      SubArchMenuList::where('arch_menu_id', $id)->delete();
-            if($personal_model->count()) PersonalList::where('doc_arch_menu_id', $id)->delete();
+        } else {
+            return response()->json(['success' => false, 'message'=>'Failed to delete. It has child menus']);
         }
-
-        $model->delete();
-        
-        return response('The record deleted successfully', 200);
     }
 
     public function personalMenuOld($id){

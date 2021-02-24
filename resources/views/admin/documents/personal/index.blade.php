@@ -72,7 +72,7 @@
                         @foreach($models as $key => $model)
                         <tr id="row_{{ $model->id }}">
                           <td>{{ $key+1}}</td>
-                          <td>{{ ($model->menu->parent_id != 0) ? $model->menu->parentsPersonal($model->menu->parent_id) : '' }} {{ $model->menu->title_uz??''}}</td>
+                          <td>{{ (($model->menu->parent_id??0) != 0) ? $model->menu->parentsPersonal($model->menu->parent_id??0) : '' }} {{ $model->menu->title_uz??''}}</td>
                           <td>{{ $model->doc_title }}</td>
                           <td>
                             @if($model->status)
