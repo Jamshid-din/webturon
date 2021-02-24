@@ -40,20 +40,11 @@
                                 <div class="panel">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#faqs_{{$key}}"><i class="fa fa-{{ ($key == 0) ? 'plus':'minus' }}"></i> {{ $value->title_uz }}</a>
+                                            <a class="parentMenu" data-key="{{ $key }}" data-id="{{ $value->id }}" data-toggle="collapse" data-parent="#accordion" href="#faqs_{{$key}}"><i class="fa fa-{{ ($key == 0) ? 'plus':'minus' }}"></i> {{ $value->title_uz }}</a>
                                         </h4>
                                     </div>
                                     <div id="faqs_{{$key}}" class="panel-collapse {{ ($key == 0) ? 'in':'collapse' }}">
-                                        @foreach($sub_menu as $k => $sub_value)
-                                            @if($sub_value->arch_menu_id === $value->id)
-
-                                                <p>
-                                                    <i class="fa fa-bars"></i>
-                                                    <a href="#" class="get-sub" data-id="{{ $sub_value->id }}">  {{ $sub_value->title_uz }} </span>
-                                                </p>
-
-                                            @endif
-                                        @endforeach
+                                        
                                     </div>
                                 </div>
                             @endforeach
@@ -198,6 +189,7 @@
 
 
         // When Department is choosen from right menu of the departments
+
         $(".get-sub").click(function(){
 
             // Get sub depart id to send request when department is clicked
@@ -287,6 +279,37 @@
             }, 1500);
             
         });
+        
+        $(document).on('click', '.parentMenu', function(){
+            let id = $(this).data("id");
+            let key = $(this).data("key")
+
+            $.ajax({
+                "url": "/docs/fetch_child/" + id,
+                'type': "GET",
+                success: function(data){
+
+                    let sub_menu = data['sub_menu']
+                    let newChild = ''
+
+                    $.each(sub_menu, function(index, val){
+                        newChild += '<p><i class="fa fa-bars"></i><a href="#" class="parentMenu" data-key="'+index+'" data-id="'+val.id+'">  '+val.title_uz+' </span></p>'
+                    })
+
+                    $('#faqs_'+key).append(newChild)    
+                    
+
+                },
+                complete: function(){
+                    $('#example').fadeIn();
+                },
+                error: function(e) {
+                    console.log(e)
+                }
+
+            });
+
+        })
 
 
     </script>

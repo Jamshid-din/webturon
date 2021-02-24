@@ -18,6 +18,7 @@ Route::group(['middleware' => ['guest']], function () {
     
     Route::get('/docs', 'DocumentController@index');
     Route::get('/docs/fetch_data', 'DocumentController@fetchData');
+    Route::get('/docs/fetch_child/{id}', 'DocumentController@fetchChild');
     Route::get('/download-docs/{id}', 'DocumentController@download')->name('download-docs');
     
     Route::get('/ip_phones', 'IpPhoneController@index');
