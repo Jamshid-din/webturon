@@ -54,18 +54,9 @@ class ArchMenuList extends Model
         return $str;
     }
 
-    public function parentsInverseArr($id)
+    public function childs()
     {
-        $checkId = ArchMenuList::where('id', $id)->get();
-
-        $query = ArchMenuList::where('role', 0)->where('parent_id', $checkId->id)->get();
-        if($query){
-            return false;
-        }
-        else{
-            return true;
-        } 
-
+        return $this->hasMany(ArchMenuList::class,'parent_id','id')->where('status', 1);
     }
 
 }

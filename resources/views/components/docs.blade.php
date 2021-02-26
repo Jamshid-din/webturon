@@ -32,26 +32,18 @@
 
                 <!-- Sider Menu Archive -->
                 <div class="col-lg-4">
-                    <div class="faqs-list">
-                        <h3>Раздел Документов</h3>
-                        <div class="panel-group" id="accordion">
-                            
-                            @foreach($menu as $key => $value)
-                                <div class="panel">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="parentMenu" data-key="{{ $key }}" data-id="{{ $value->id }}" data-toggle="collapse" data-parent="#accordion" href="#faqs_{{$key}}"><i class="fa fa-{{ ($key == 0) ? 'plus':'minus' }}"></i> {{ $value->title_uz }}</a>
-                                        </h4>
-                                    </div>
-                                    <div id="faqs_{{$key}}" class="panel-collapse {{ ($key == 0) ? 'in':'collapse' }}">
-                                        
-                                    </div>
-                                </div>
-                            @endforeach
+                    <h3>Раздел Документов</h3>
 
-                        </div>
-                        
-                    </div>
+                        <ul id="tree1">
+                            @foreach($menu as $value)
+                                <li style="font-weight: bold; font-size: 16px; margin:10px; padding 5px; cursor: pointer;" >
+                                    {{ $value->title_uz }}
+                                    @if(count($value->childs))
+                                        @include('components.ajax',['childs' => $value->childs])
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
                 </div>
                 <!-- Menu END -->
 
@@ -60,7 +52,7 @@
     </section>
     <!--FAQS AREA END-->
 
-
+    <script src="{{ asset('js/treeview.js') }}"></script>
     <script src="{{ asset ("js/vendor/jquery-1.12.4.min.js") }}"></script>
     <script type="text/javascript">
         /* Formatting function for row details - modify as you need */
@@ -190,7 +182,7 @@
 
         // When Department is choosen from right menu of the departments
 
-        $(".get-sub").click(function(){
+        $(".post_users").click(function(){
 
             // Get sub depart id to send request when department is clicked
             let dep_id = $(this).attr("data-id");
@@ -279,38 +271,6 @@
             }, 1500);
             
         });
-        
-        $(document).on('click', '.parentMenu', function(){
-            let id = $(this).data("id");
-            let key = $(this).data("key")
-
-            $.ajax({
-                "url": "/docs/fetch_child/" + id,
-                'type': "GET",
-                success: function(data){
-
-                    let sub_menu = data['sub_menu']
-                    let newChild = ''
-
-                    $.each(sub_menu, function(index, val){
-                        newChild += '<p><i class="fa fa-bars"></i><a href="#" class="parentMenu" data-key="'+index+'" data-id="'+val.id+'">  '+val.title_uz+' </span></p>'
-                    })
-
-                    $('#faqs_'+key).append(newChild)    
-                    
-
-                },
-                complete: function(){
-                    $('#example').fadeIn();
-                },
-                error: function(e) {
-                    console.log(e)
-                }
-
-            });
-
-        })
-
 
     </script>
 

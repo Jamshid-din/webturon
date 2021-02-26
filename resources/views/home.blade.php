@@ -61,7 +61,7 @@
     @include('layouts.footer')
     <!--====== SCRIPTS JS ======-->
     <script src="{{ asset ("js/jquery.min.js") }}"></script>
-
+    <script src="{{ asset('js/treeview.js') }}"></script>
     <script src="{{ asset ("js/vendor/jquery-1.12.4.min.js") }}"></script>
     <script src="{{ asset ("js/vendor/bootstrap.min.js") }}"></script>
     <script src="{{ asset ("js/jquery.dataTables.min.js") }}"></script>

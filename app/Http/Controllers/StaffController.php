@@ -52,7 +52,7 @@ class StaffController extends Controller
                 ->leftJoin('doc_files as b', 'a.doc_file_id','=','b.id')
                 ->leftJoin('doc_files as d', 'a.doc_e_file_id','=','d.id')
                 ->select('a.*','b.doc_name','d.doc_name as e_doc_name')
-                ->where('a.doc_sub_arch_menu_id', $sub_id)
+                ->where('a.doc_menu_id', $sub_id)
                 ->where('a.status', 1)
                 ->get();
                 break;
