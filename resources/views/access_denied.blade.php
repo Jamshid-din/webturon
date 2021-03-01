@@ -6,6 +6,6 @@
     <title>Access Denied!</title>
 </head>
 <body style="background: #096da1 url({{ asset ('images/access_denied.jpg') }}) no-repeat fixed center;background-size: auto 100%;">
-
+    <h1>Hola world!!</h1>
 </body>
 </html>
