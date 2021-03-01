@@ -35,6 +35,8 @@ Route::group(['middleware' => ['guest']], function () {
 	Route::get('/news-guest','NewsController@guestIndex');
 	Route::get('/news-fetch-post/{id}','NewsController@show');
 
+	Route::get('/error/templates','UserController@accessDenied');
+
 });
 
 

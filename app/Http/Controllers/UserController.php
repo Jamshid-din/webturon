@@ -102,4 +102,9 @@ class UserController extends Controller
         
         return response()->json(['success' => 'Successfully deleted!!!' ]);
     }
+
+    public function accessDenied()
+    {
+        return view('access_denied');
+    }
 }
