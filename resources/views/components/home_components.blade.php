@@ -3,8 +3,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset ("style.css") }}">
     <link rel="stylesheet" href="{{ asset ("css/owl.carousel.css") }}">
 
-  <!--SERVICE AREA-->
- 
+1   <!--SERVICE AREA-->
+
+    
     <section class="service-area">
         <div class="service-top-area padding-top">
             <div class="container">
@@ -29,7 +30,7 @@
                                 <div class="service-details">
                                     <h4>Департаменты</h4>
                                     <p>Все департаменты банка</p>
-                                    <a href="{{ url('/ip_phones') }}">перейти</a>
+                                    <a href="index-3.html">перейти</a>
                                 </div>
                             </div>
                             <div class="single-service">
@@ -41,7 +42,7 @@
                                 <div class="service-details">
                                     <h4>новости</h4>
                                     <p>Новости Банка</p>
-                                    <a href="{{ url('/news-guest') }}">читать</a>
+                                    <a href="index-5.html">читать</a>
                                 </div>
                             </div>
                             <div class="single-service">
@@ -65,7 +66,7 @@
                                 <div class="service-details">
                                     <h4>Программы</h4>
                                     <p>Программы для ПК</p>
-                                    <a href="{{ url('/soft-guest') }}">перейти</a>                                   
+                                    <a href="{{ url('/soft') }}">перейти</a>                                   
                                 </div>
                             </div>
                         </div>
@@ -129,137 +130,140 @@
 
     <!--TESTMONIAL AREA -->
   
-    <section class="testmonial-area section-padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3 col-sm-12 col-xs-12">
-                    <div class="area-title text-center wow fadeIn">
-                        <h2>правление банка</h2>
+        <section class="testmonial-area section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3 col-sm-12 col-xs-12">
+                        <div class="area-title text-center wow fadeIn">
+                            <h2>правление банка</h2>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2">
-                    <div class="client-photo-list wow fadeIn">
-                        <div class="client_photo">
-                            <div class="item">
-                                <img src="{{ asset ("images/rahbar.jpg") }}" alt="">
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2">
+                        <div class="client-photo-list wow fadeIn">
+                            <div class="client_photo">
+                                <div class="item">
+                                    <img src="{{ asset ("images/rahbar.jpg") }}" alt="">
+                                </div>
+                                <div class="item">
+                                    <img src="{{ asset ("images/rahbarzam1.jpg") }}" alt="">
+                                </div>
+                                <div class="item">
+                                    <img src="{{ asset ("images/rahbarzam3.jpg") }}" alt="">
+                                </div>
+                                <div class="item">
+                                    <img src="{{ asset ("images/rahbarzam2.jpg") }}" alt="">
+                                </div>
+                                <div class="item">
+                                    <img src="{{ asset ("images/rahbarzam4.jpg") }}" alt="">
+                                </div>
+                                <div class="item">
+                                    <img src="{{ asset ("images/rahbarzam5.jpg") }}" alt="">
+                                </div>
                             </div>
-                            <div class="item">
-                                <img src="{{ asset ("images/rahbarzam1.jpg") }}" alt="">
-                            </div>
-                            <div class="item">
-                                <img src="{{ asset ("images/rahbarzam3.jpg") }}" alt="">
-                            </div>
-                            <div class="item">
-                                <img src="{{ asset ("images/rahbarzam2.jpg") }}" alt="">
-                            </div>
-                            <div class="item">
-                                <img src="{{ asset ("images/rahbarzam4.jpg") }}" alt="">
-                            </div>
-                            <div class="item">
-                                <img src="{{ asset ("images/rahbarzam5.jpg") }}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="client_nav">
+                            <span class="fa fa-angle-left testi_prev"></span>
+                            <span class="fa fa-angle-right testi_next"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-10 col-md-offset-1 text-center">
+                        <div class="client-details-content wow fadeIn">
+                            <div class="client_details">
+                                <div class="item">
+                                    
+                                    <h3>Мирзаев Чори Садибакосович</h3>
+                                    <p>Председатель правления</p>
+                                    <br>
+                                    <p>Телефон: +998 95 144-60-00</p> 
+                                    <p>Факс: +998 71 244-32-32</p>                               
+                                    
+                                </div>
+                                <div class="item">
+                                    
+                                    <h3>Ташаев Азиз Тахирович</h3>
+                                    <p>Первый Заместитель Председателя Правления</p>
+                                    <br>
+                                    <p>Телефон: +998 95 144-60-00</p> 
+                                    <p>Факс: +998 71 244-32-32</p>
+                                </div>
+                                <div class="item">
+                                    
+                                    <h3>Калдыбаев Султан Торабекович</h3>
+                                    <p>Заместитель Председателя Правления</p>
+                                    <br>
+                                    <p>Телефон: +998 95 144-60-00</p> 
+                                    <p>Факс: +998 71 244-32-32</p>
+                                </div>
+                                <div class="item">
+                                    
+                                    <h3>Рустамов Дилшод Абдухаписович</h3>
+                                    <p>Вр.и.о. Заместителя Председателя Правления</p>
+                                    <p>Директор Департамента Казначейство и Ценных бумаг</p>
+                                    <br>
+                                    <p>Телефон: +998 95 144-60-00</p> 
+                                    <p>Факс: +998 71 244-32-32</p>
+                                </div>
+                                <div class="item">
+                                    
+                                    <h3>Бозоров Шерзод Эшманавич</h3>
+                                    <p>Директор Департамента Бухгалтерского учёта и Финансовой отчётности</p>
+                                    <br>
+                                    <p>Телефон: +998 95 144-60-00</p> 
+                                    <p>Факс: +998 71 244-32-32</p>
+                                </div>
+                                <div class="item">
+                                    
+                                    <h3>Арипов Бекзод Нафасович</h3>
+                                    <p>Директор Департамента Юридической службы</p>
+                                    <br>
+                                    <p>Телефон: +998 95 144-60-00</p> 
+                                    <p>Факс: +998 71 244-32-32</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="client_nav">
-                        <span class="fa fa-angle-left testi_prev"></span>
-                        <span class="fa fa-angle-right testi_next"></span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-10 col-md-offset-1 text-center">
-                    <div class="client-details-content wow fadeIn">
-                        <div class="client_details">
-                            <div class="item">
-                                
-                                <h3>Мирзаев Чори Садибакосович</h3>
-                                <p>Председатель правления</p>
-                                <br>
-                                <p>Телефон: +998 95 144-60-00</p> 
-                                <p>Факс: +998 71 244-32-32</p>                               
-                                
-                            </div>
-                            <div class="item">
-                                
-                                <h3>Ташаев Азиз Тахирович</h3>
-                                <p>Первый Заместитель Председателя Правления</p>
-                                <br>
-                                <p>Телефон: +998 95 144-60-00</p> 
-                                <p>Факс: +998 71 244-32-32</p>
-                            </div>
-                            <div class="item">
-                                
-                                <h3>Калдыбаев Султан Торабекович</h3>
-                                <p>Заместитель Председателя Правления</p>
-                                <br>
-                                <p>Телефон: +998 95 144-60-00</p> 
-                                <p>Факс: +998 71 244-32-32</p>
-                            </div>
-                            <div class="item">
-                                
-                                <h3>Рустамов Дилшод Абдухаписович</h3>
-                                <p>Вр.и.о. Заместителя Председателя Правления</p>
-                                <p>Директор Департамента Казначейство и Ценных бумаг</p>
-                                <br>
-                                <p>Телефон: +998 95 144-60-00</p> 
-                                <p>Факс: +998 71 244-32-32</p>
-                            </div>
-                            <div class="item">
-                                
-                                <h3>Бозоров Шерзод Эшманавич</h3>
-                                <p>Директор Департамента Бухгалтерского учёта и Финансовой отчётности</p>
-                                <br>
-                                <p>Телефон: +998 95 144-60-00</p> 
-                                <p>Факс: +998 71 244-32-32</p>
-                            </div>
-                            <div class="item">
-                                
-                                <h3>Арипов Бекзод Нафасович</h3>
-                                <p>Директор Департамента Юридической службы</p>
-                                <br>
-                                <p>Телефон: +998 95 144-60-00</p> 
-                                <p>Факс: +998 71 244-32-32</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="testmonial-area section-padding" style="background-color: #F2F3F4">
-        <div class="area-title text-center wow fadeIn">
-            <h2>Анонимные предложения сотрудников банка</h2>                          
-        </div>
-        <div class="container">
-            <form id="anonymForm" method="POST" action="{{ route('store-message') }}">
-                @csrf
-                <div class="row">
-                    <div class="col-25">
-                    <label for="message_title">Выберите раздел</label>
+
+
+        <section class="testmonial-area section-padding" style="background-color: #F2F3F4">
+            <div class="area-title text-center wow fadeIn">
+                <h2>Анонимные предложения сотрудников банка</h2>                          
+            </div>
+            <div class="container">
+                <form id="anonymForm" method="POST" action="{{ route('store-message') }}">
+                    @csrf
+                    <div class="row">
+                        <div class="col-25">
+                        <label for="message_title">Выберите раздел</label>
+                        </div>
+                        <div class="col-75">
+                        <input type="text" name="title" id="message_title" maxlength="150" placeholder="Заглавие..." required>
+                        </div>
                     </div>
-                    <div class="col-75">
-                    <input type="text" name="title" id="message_title" maxlength="150" placeholder="Заглавие..." required>
+                    <div class="row">
+                        <div class="col-25">
+                        <label for="message_text">Предложения по банку</label>
+                        </div>
+                        <div class="col-75">
+                        <textarea id="message_text" name="text" placeholder="Напишите что-нибудь..." style="height:200px" maxlength="400" required></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-25">
-                    <label for="message_text">Предложения по банку</label>
+                    <div class="row">
+                        <input type="submit" class="btn btn-primary" value="Отправить">
                     </div>
-                    <div class="col-75">
-                    <textarea id="message_text" name="text" placeholder="Напишите что-нибудь..." style="height:200px" maxlength="400" required></textarea>
-                    </div>
-                </div>
-                <div class="row">
-                    <input type="submit" class="btn btn-primary" value="Отправить">
-                </div>
-            </form>
-        </div>
-    </section>
+                </form>
+            </div>
+        </section>
+
 
     <!-- Response Modal -->
     <div id="responseModal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">

@@ -85,7 +85,7 @@
                             @foreach($models as $key => $model)
                             <tr id="row_{{ $model->id}}">
                               <td>{{ $key+1 }}</td>
-                              <td>{{ $model->archMenu->title_uz??'(Пусто)' }}</td>
+                              <td>{{ $model->parent_id??'(Пусто)' }}</td>
                               <td>{{ $model->title_uz }}</td>
                               <td>{{ $model->title_ru }}</td>
                             <td>
@@ -157,7 +157,7 @@
                           <div class="input-group-prepend">
                             <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
                           </div>
-                          <select class="form-control" data-style="btn btn-link" id="storeAddParentMenu" name="parent" data-live-search="true" required>
+                          <select class="form-control" data-style="btn btn-link" id="selectDep" name="parent" data-live-search="true" required>
                           <option value="" disabled selected> Select Parent Menu </option>
                             @foreach($parent as $value)
                               <option value="{{ $value->id }}"> {{ $value->title_uz }} </option>
@@ -165,7 +165,18 @@
                           </select>
                         </div>
                       </div>
-
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
+                          </div>
+                          <select class="form-control" data-style="btn btn-link" id="selectSubDep" name="parent" data-live-search="true" required>
+                          </select>
+                        </div>
+                      </div>
+                      <div id="dynamicselect">
+                      </div>
+                      <div>
                       <div class="form-group">
                         <div class="input-group">
                           <div class="input-group-prepend">
@@ -250,7 +261,6 @@
                           </div>
                           <select class="form-control" data-style="btn btn-link" id="parentMenu" name="parent" data-live-search="true">
                             <option value=""> Select Parent Menu </option>
-
                             @foreach($parent as $value)
                               @if($value->id == ($parentId??''))
                                 <option value="{{ $value->id }}" selected> {{ $value->title_uz }} </option>
@@ -261,7 +271,6 @@
                           </select>
                         </div>
                       </div>
-
                       <div class="form-group">
                         <div class="input-group">
                           <div class="input-group-prepend">
@@ -479,6 +488,66 @@
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
     $('select').selectpicker()
+
+    $('#selectDep').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+
+    let optionValue = $(this).val()
+    $('#selectSubDep option').remove()
+    $.ajax({
+      url: '/admin-menu-archive-sub/fetch-sub/'+ optionValue,
+      type: 'get',
+      success: function(result){
+        
+        let sub_menu = result['sub_menu']
+        let newOptions = '<option id="defaultMenu" value="" disabled selected>Select Sub Menu</option>'
+
+        $.each(sub_menu, function(index, val){
+          newOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
+        })
+        $('#dynamicselect').empty()
+        $('#selectSubDep').append(newOptions).selectpicker('refresh')
+
+      },
+      error: function(e){
+        console.log(e)
+      }
+    })
+
+    })
+
+
+    $('#selectSubDep').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+
+    let optionValue = $(this).val()
+    $.ajax({
+      url: '/admin-menu-archive-sub/fetch-parent-sub-id/'+ optionValue,
+      type: 'get',
+      success: function(result){
+        
+        $('#dynamicselect').empty()
+        let sub_menu = result['sub_menu'] 
+        let newOptions = '<option id="defaultMenu" value="" disabled selected>Select Sub Menu</option>'
+        let newSelect = `<div class="form-group"><div class="input-group"><div class="input-group-prepend"><div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div></div><select class="form-control" data-style="btn btn-link" id="selectSubDep{{ $value->id }}" name="parent" data-live-search="true"></select></div></div>`
+        
+        $.each(sub_menu, function(index, val){
+          newOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
+        })
+
+        if(sub_menu.length > 0) {
+          $('#dynamicselect').append(newSelect); 
+        }
+
+        $('#selectSubDep{{ $value->id }}').append(newOptions).selectpicker('refresh')
+        
+
+      },
+      error: function(e){
+        console.log(e)
+      }
+    })
+
+    })
+
 
     $('.editLink').click(function(){
       

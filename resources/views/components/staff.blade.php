@@ -31,42 +31,29 @@
                     </div>
                 </div>
                 
+                <!-- Sider Menu Archive -->
                 <div class="col-lg-4">
-                    <div class="faqs-list">
-                        <h3>Фильтр</h3>
-                        <div class="panel-group" id="accordion">
+                    <h3>Фильтр</h3>
 
-                            @foreach($menu as $key => $value)
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#faqs_{{$key}}"><i class="fa fa-{{ ($key == 0) ? 'plus':'minus'}}"></i> {{ $value->title_uz }} </a>
-                                    </h4>
-                                </div>
-                                
-                                <div id="faqs_{{$key}}" class="panel-collapse {{ ($key == 0) ? 'in':'collapse'}}">
-                                @foreach($sub_menu as $k => $sub_value)
-                                    @if($sub_value->arch_menu_id === $value->id)
-
-                                        <p>
-                                            <i class="fa fa-bars"></i>
-                                            <a href="#" class="get-sub" data-id="{{ $sub_value->id }}">  {{ $sub_value->title_uz }} </span>
-                                        </p>
-
+                        <ul id="tree1">
+                            @foreach($menu as $value)
+                                <li style="font-weight: bold; font-size: 16px; margin:10px; padding 5px; cursor: pointer;" >
+                                    {{ $value->title_uz }}
+                                    @if(count($value->childs))
+                                        @include('components.ajax',['childs' => $value->childs])
                                     @endif
-                                @endforeach
-                                </div>
-
-                            </div>
+                                </li>
                             @endforeach
-                        </div>
-                    </div>
+                        </ul>
                 </div>
+                <!-- Menu END -->
+
             </div>
         </div>
     </section>
     <!--FAQS AREA END-->
-
+    
+    <script src="{{ asset('js/treeview.js') }}"></script>
     <script src="{{ asset ("js/vendor/jquery-1.12.4.min.js") }}"></script>
     <script type="text/javascript">
 
@@ -156,7 +143,7 @@
         });
 
         // When Department is choosen from right menu of the departments
-        $(".get-sub").click(function(){
+        $(".post_users").click(function(){
 
             // Get sub depart id to send request when department is clicked
             let dep_id = $(this).attr("data-id");

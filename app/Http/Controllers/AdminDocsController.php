@@ -61,24 +61,24 @@ class AdminDocsController extends Controller
             ));
 
             $menu_list = ArchMenuList::where('role', 0)->get();
-            $sub_menu_list = SubArchMenuList::whereHas('archMenu', function($query){
-                $query->where('role', 0);
-            })
-            ->where('arch_menu_id',$menu_id)
-            ->orderBy('id', 'DESC')
-            ->get();
+            // $sub_menu_list = SubArchMenuList::whereHas('archMenu', function($query){
+            //     $query->where('role', 0);
+            // })
+            // ->where('arch_menu_id',$menu_id)
+            // ->orderBy('id', 'DESC')
+            // ->get();
 
-            return view('admin.documents.archive.index',compact('models','menu_list','sub_menu_list','menu_id','sub_menu_id','title','text','status')); 
+            return view('admin.documents.archive.index',compact('models','menu_list','menu_id','sub_menu_id','title','text','status')); 
         }
 
         $models = DocumentList::orderBy('created_at', 'desc')->paginate(10);
         $menu_list = ArchMenuList::where('role', 0)->orderBy('sort', 'desc')->get();
-        $sub_menu_list = SubArchMenuList::whereHas('archMenu', function($query){
-            $query->where('role', 0);
-        })
-        ->orderBy('id', 'DESC')->get();
+        // $sub_menu_list = SubArchMenuList::whereHas('archMenu', function($query){
+        //     $query->where('role', 0);
+        // })
+        // ->orderBy('id', 'DESC')->get();
 
-        return view('admin.documents.archive.index',compact('models','menu_list','sub_menu_list')); 
+        return view('admin.documents.archive.index',compact('models','menu_list')); 
     }
 
     public function archStore(Request $request){
@@ -87,7 +87,6 @@ class AdminDocsController extends Controller
             'doc_title'     => 'required',
             'doc_text'      => 'required',
             'menu_id'       => 'required',
-            'sub_menu_id'   => 'required',
             'status'        => 'required',
         ]);
 
@@ -128,7 +127,7 @@ class AdminDocsController extends Controller
         $newDoc->doc_title              = $request->input('doc_title');
         $newDoc->doc_text               = $request->input('doc_text');
         $newDoc->doc_arch_menu_id       = $request->input('menu_id');
-        $newDoc->doc_sub_arch_menu_id   = $request->input('sub_menu_id');
+        $newDoc->doc_menu_id            = $request->input('menu_id');
         $newDoc->doc_file_id            = $scanFileId;
         $newDoc->doc_e_file_id          = $electronicFileId;
         $newDoc->status                 = $request->input('status');
@@ -198,7 +197,7 @@ class AdminDocsController extends Controller
             'doc_title'            => $request->input('doc_title'),
             'doc_text'             => $request->input('doc_text'),
             'doc_arch_menu_id'     => $request->input('menu_id'),
-            'doc_sub_arch_menu_id' => $request->input('sub_menu_id'),
+            'doc_menu_id'          => $request->input('menu_id'),
             'doc_file_id'          => $scanFileId,
             'doc_e_file_id'        => $electronicFileId,
             'status'               => $request->input('status')
@@ -215,9 +214,9 @@ class AdminDocsController extends Controller
         $electronicFile = DocFile::find( $oldArch->doc_e_file_id);
         
         $menu       = ArchMenuList::where('role', 0)->orderBy('sort', 'ASC')->get();
-        $subMenu    = SubArchMenuList::where('arch_menu_id', $oldArch->doc_arch_menu_id)->get();
+        // $subMenu    = SubArchMenuList::where('arch_menu_id', $oldArch->doc_arch_menu_id)->get();
 
-        return response()->json(['oldArch' => $oldArch, 'scanFile' => $scanFile,'electronicFile' => $electronicFile, 'menu' => $menu, 'subMenu' => $subMenu]);
+        return response()->json(['oldArch' => $oldArch, 'scanFile' => $scanFile,'electronicFile' => $electronicFile, 'menu' => $menu]);
     }
 
     public function archDelete($id){
@@ -255,7 +254,7 @@ class AdminDocsController extends Controller
         if($request->input()){
 
             $menu_id    = $request->input(['menu_id']);
-            $sub_menu_id= $request->input(['sub_menu_id']);
+            // $sub_menu_id= $request->input(['menu_id']);
             $title = $request->input(['title']);
             $text = $request->input(['text']);
             $status = $request->input(['status']);
@@ -264,8 +263,6 @@ class AdminDocsController extends Controller
 
             if($menu_id) $search->where('doc_arch_menu_id', $menu_id );
             
-            if($sub_menu_id) $search->where('doc_arch_menu_id', $sub_menu_id );
-
             if($title) $search->where('doc_title', 'like', '%'. $title .'%');
 
             if($text) $search->where('doc_text', 'like', '%'.$text.'%');
@@ -275,7 +272,6 @@ class AdminDocsController extends Controller
             $models = $search->paginate(10);
             $models->appends ( array (
                 'menu_id'       => $menu_id,
-                'sub_menu_id'   => $sub_menu_id,
                 'title'         => $title,
                 'text'          => $text,
                 'status'        => $status
@@ -283,23 +279,23 @@ class AdminDocsController extends Controller
 
 
             $menu_list = ArchMenuList::where('role', 1)->get();
-            $sub_menu_list = SubArchMenuList::whereHas('archMenu', function($query){
-                $query->where('role', 1);
-            })
-            ->where('arch_menu_id',$menu_id)->orderBy('id', 'DESC')->get();
+            // $sub_menu_list = SubArchMenuList::whereHas('archMenu', function($query){
+            //     $query->where('role', 1);
+            // })
+            // ->where('arch_menu_id',$menu_id)->orderBy('id', 'DESC')->get();
             
 
-            return view('admin.documents.personal.index',compact('models','menu_list','sub_menu_list','menu_id','sub_menu_id','title','text','status')); 
+            return view('admin.documents.personal.index',compact('models','menu_list','menu_id','title','text','status')); 
         }
 
         $models = PersonalList::orderBy('created_at', 'desc')->paginate(10);
         $menu_list = ArchMenuList::where('role', 1)->orderBy('sort', 'desc')->get();
-        $sub_menu_list = SubArchMenuList::whereHas('archMenu', function($query){
-            $query->where('role', 1);
-        })
-        ->orderBy('id', 'DESC')->get();
+        // $sub_menu_list = SubArchMenuList::whereHas('archMenu', function($query){
+        //     $query->where('role', 1);
+        // })
+        // ->orderBy('id', 'DESC')->get();
         
-        return view('admin.documents.personal.index',compact('models','menu_list','sub_menu_list')); 
+        return view('admin.documents.personal.index',compact('models','menu_list')); 
 
     }
 
@@ -308,7 +304,7 @@ class AdminDocsController extends Controller
         $this->validate($request, [
             'doc_title'     => 'required',
             'menu_id'       => 'required',
-            'sub_menu_id'   => 'required',
+            // 'sub_menu_id'   => 'required',
             'status'        => 'required',
         ]);
 
@@ -347,7 +343,7 @@ class AdminDocsController extends Controller
         $newDoc->doc_title              = $request->input('doc_title');
         $newDoc->doc_text               = $request->input('doc_text');
         $newDoc->doc_arch_menu_id       = $request->input('menu_id');
-        $newDoc->doc_sub_arch_menu_id   = $request->input('sub_menu_id');
+        $newDoc->doc_menu_id            = $request->input('menu_id');
         $newDoc->doc_file_id            = $scanFileId;
         $newDoc->doc_e_file_id          = $electronicFileId;
         $newDoc->status                 = $request->input('status');
@@ -417,7 +413,7 @@ class AdminDocsController extends Controller
             'doc_title'            => $request->input('doc_title'),
             'doc_text'             => $request->input('doc_text'),
             'doc_arch_menu_id'     => $request->input('menu_id'),
-            'doc_sub_arch_menu_id' => $request->input('sub_menu_id'),
+            'doc_menu_id'          => $request->input('menu_id'),
             'doc_file_id'          => $scanFileId,
             'doc_e_file_id'        => $electronicFileId,
             'status'               => $request->input('status')
@@ -431,9 +427,9 @@ class AdminDocsController extends Controller
         $electronicFile = DocFile::find( $oldPersonal->doc_e_file_id);
         
         $menu       = ArchMenuList::where('role', 1)->orderBy('sort', 'ASC')->get();
-        $subMenu    = SubArchMenuList::where('arch_menu_id', $oldPersonal->doc_arch_menu_id)->get();
+        // $subMenu    = SubArchMenuList::where('arch_menu_id', $oldPersonal->doc_arch_menu_id)->get();
 
-        return response()->json(['oldPersonal' => $oldPersonal, 'scanFile' => $scanFile,'electronicFile' => $electronicFile, 'menu' => $menu, 'subMenu' => $subMenu]);
+        return response()->json(['oldPersonal' => $oldPersonal, 'scanFile' => $scanFile,'electronicFile' => $electronicFile, 'menu' => $menu]);
     }
 
     public function personalDelete($id){
