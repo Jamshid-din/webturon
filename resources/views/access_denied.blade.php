@@ -8,5 +8,6 @@
 <body style="background: #096da1 url({{ asset ('images/access_denied.jpg') }}) no-repeat fixed center;background-size: auto 100%;">
     <h1>Hola world!!</h1>
     <h3> SAvaaa!!))</h3>
+    <h6>Sava 222</h6>
 </body>
 </html>
