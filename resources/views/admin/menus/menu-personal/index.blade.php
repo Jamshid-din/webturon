@@ -517,7 +517,7 @@
           $('#responseModal .modal-title').text('Success')
           $('#responseModal .modal-footer button').removeClass('btn-danger').addClass('btn-success')
           $('#responseModal').modal('toggle')
-          $('#responseModal .modal-body p').text(result)
+          $('#responseModal .modal-body p').text(result['message'])
           $('#row_'+itemId).remove()
 
           setTimeout(function() {$('#responseModal').modal('hide')}, 1500)
