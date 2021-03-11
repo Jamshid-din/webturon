@@ -66,7 +66,7 @@ class IpPhoneController extends Controller
     public function adminIpIndex(Request $request){
 
         $current_user_role = Auth::user()->roles->role_code;
-        if($current_user_role != "super_admin" && $current_user_role != "it_admin"){
+        if($current_user_role != "super_admin" && $current_user_role != "it_admin" && $current_user_role != "strategy"){
             abort(404);
         } 
         

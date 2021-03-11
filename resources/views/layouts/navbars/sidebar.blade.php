@@ -51,7 +51,7 @@
           </ul>
         </div>
       </li>
-      @if(Auth::user()->roles->role_code != "it_admin")
+      @if(Auth::user()->roles->role_code != "it_admin" || Auth::user()->roles->role_code == "strategy")
       <!-- Document Management -->
       <li class="nav-item {{ ($activePage == 'archive' || $activePage == 'personal') ? ' active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#idDocs" aria-expanded="{{ ($show == 'document') ? 'true':'false'}}">
@@ -62,7 +62,7 @@
         </a>
         <div class="collapse {{ ($show == 'document') ? 'show':'' }}" id="idDocs">
           <ul class="nav">
-            @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "metodologiya")
+            @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "metodologiya" || Auth::user()->roles->role_code == "strategy")
               <li class="nav-item{{ $activePage == 'archive' ? ' active' : '' }}">
                 <a class="nav-link" href="{{ route('admin-docs-archive') }}">
                   <span class="sidebar-mini"> D </span>
@@ -70,7 +70,7 @@
                 </a>
               </li>
             @endif
-            @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "hr")
+            @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "hr" || Auth::user()->roles->role_code == "strategy")
               <li class="nav-item{{ $activePage == 'personal' ? ' active' : '' }}">
                 <a class="nav-link" href="{{ route('admin-docs-personal') }}">
                   <span class="sidebar-mini"> D </span>
@@ -92,7 +92,7 @@
         </a>
         <div class="collapse {{ ($show == 'menu') ? 'show':''}}" id="idMenu">
           <ul class="nav">
-            @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "metodologiya")
+            @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "metodologiya" || Auth::user()->roles->role_code == "strategy")
             <li class="nav-item{{ $activePage == 'archive-menu' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin-menu-archive') }}">
                 <span class="sidebar-mini"> M </span>
@@ -100,7 +100,7 @@
               </a>
             </li>
             @endif
-            @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "hr")
+            @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "hr" || Auth::user()->roles->role_code == "strategy")
             <li class="nav-item{{ $activePage == 'personal-menu' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin-menu-personal') }}">
                 <span class="sidebar-mini"> M </span>
@@ -108,7 +108,7 @@
               </a>
             </li>
             @endif
-            @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "it_admin")
+            @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "it_admin" || Auth::user()->roles->role_code == "strategy")
             <li class="nav-item{{ $activePage == 'soft-menu' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin-menu-soft') }}">
                 <span class="sidebar-mini"> M </span>
@@ -126,7 +126,7 @@
         </div>
       </li>
 
-      @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "it_admin")
+      @if(Auth::user()->roles->role_code == "super_admin" || Auth::user()->roles->role_code == "it_admin" || Auth::user()->roles->role_code == "strategy")
       <!-- Ip phone Management -->
       <li class="nav-item{{ $activePage == 'ip-phone' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin-ip') }}">
