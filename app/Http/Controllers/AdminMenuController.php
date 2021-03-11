@@ -29,7 +29,7 @@ class AdminMenuController extends Controller
     public function archIndex(Request $request){
 
         $current_user_role = Auth::user()->roles->role_code;
-        if($current_user_role != "super_admin" && $current_user_role != "metodologiya"){
+        if($current_user_role != "super_admin" && $current_user_role != "metodologiya" &&  $current_user_role != "strategy"){
             abort(404);
         } 
 
@@ -82,7 +82,7 @@ class AdminMenuController extends Controller
     public function archSubIndex(Request $request){
 
         $current_user_role = Auth::user()->roles->role_code;
-        if($current_user_role != "super_admin" && $current_user_role != "hr"){
+        if($current_user_role != "super_admin" && $current_user_role != "hr"  && $current_user_role != "strategy"){
             abort(404);
         } 
 
@@ -292,7 +292,7 @@ class AdminMenuController extends Controller
     public function personalIndex(Request $request){
 
         $current_user_role = Auth::user()->roles->role_code;
-        if($current_user_role != "super_admin" && $current_user_role != "hr"){
+        if($current_user_role != "super_admin" && $current_user_role != "hr" && $current_user_role != "strategy"){
             abort(404);
         } 
 
@@ -421,7 +421,7 @@ class AdminMenuController extends Controller
     public function personalSubIndex(Request $request){
 
         $current_user_role = Auth::user()->roles->role_code;
-        if($current_user_role != "super_admin" && $current_user_role != "metodologiya"){
+        if($current_user_role != "super_admin" && $current_user_role != "metodologiya" &&  $current_user_role != "strategy"){
             abort(404);
         } 
 
@@ -559,7 +559,7 @@ class AdminMenuController extends Controller
     public function depIndex(Request $request){
 
         $current_user_role = Auth::user()->roles->role_code;
-        if($current_user_role != "super_admin" && $current_user_role != "it_admin"){
+        if($current_user_role != "super_admin" && $current_user_role != "it_admin" && $current_user_role != "strategy"){
             abort(404);
         } 
 
@@ -671,7 +671,7 @@ class AdminMenuController extends Controller
     public function depSubIndex(Request $request){
 
         $current_user_role = Auth::user()->roles->role_code;
-        if($current_user_role != "super_admin" && $current_user_role != "it_admin"){
+        if($current_user_role != "super_admin" && $current_user_role != "it_admin" && $current_user_role != "strategy"){
             abort(404);
         } 
 
@@ -792,7 +792,7 @@ class AdminMenuController extends Controller
     public function softIndex(Request $request){
 
         $current_user_role = Auth::user()->roles->role_code;
-        if($current_user_role != "super_admin" && $current_user_role != "it_admin"){
+        if($current_user_role != "super_admin" && $current_user_role != "it_admin" && $current_user_role != "strategy"){
             abort(404);
         } 
         if($request->input()) {

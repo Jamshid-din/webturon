@@ -37,7 +37,7 @@ class SoftController extends Controller
     {
         
         $current_user_role = Auth::user()->roles->role_code;
-        if($current_user_role != "super_admin" && $current_user_role != "it_admin"){
+        if($current_user_role != "super_admin" && $current_user_role != "it_admin" && $current_user_role != "strategy"){
             abort(404);
         } 
 
@@ -54,7 +54,7 @@ class SoftController extends Controller
 
         # code...
         $current_user_role = Auth::user()->roles->role_code;
-        if($current_user_role != "super_admin" && $current_user_role != "it_admin"){
+        if($current_user_role != "super_admin" && $current_user_role != "it_admin" && $current_user_role != "strategy"){
             abort(404);
         }
         $menu_list = SoftMenu::orderBy('sort', 'ASC')->get();
