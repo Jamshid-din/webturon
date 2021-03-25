@@ -65,6 +65,7 @@ class IpPhoneController extends Controller
 
     public function adminIpIndex(Request $request){
 
+
         $current_user_role = Auth::user()->roles->role_code;
         if($current_user_role != "super_admin" && $current_user_role != "it_admin" && $current_user_role != "strategy"){
             abort(404);
@@ -82,11 +83,9 @@ class IpPhoneController extends Controller
             $ip             = $request->input(['ip']);
             $status         = $request->input(['status']);
 
-
-
             $currentDep     = DepartList::find($depart_id);
             $currentSubDep  = SubDepartList::where($sub_depart_id);
-            $search = IpList::orderBy('depart_id', 'ASC');
+            $search         = IpList::orderBy('depart_id', 'ASC');
 
             if($depart_id)      $search->where('depart_id', $depart_id);
 
@@ -143,6 +142,33 @@ class IpPhoneController extends Controller
         return back()->with('success', 'Successfully stored');        
     }
 
+    public function adminIpUpdate(Request $request)
+    {
+        $this->validate($request, [
+            'depart_id'     => 'required',
+            'sub_depart_id' => 'required',
+            'fio'           => 'required',
+            'descr'         => 'required',
+            'ip'            => 'required',
+            'status'        => 'required',
+        ]);
+
+        $id = $request->input('id');
+        $model = IpList::findOrFail($id);
+
+        $update = $model->update([
+            'bank_user_id'  => Auth::id(),
+            'depart_id'     => $request->input('depart_id'),
+            'sub_depart_id' => $request->input('sub_depart_id'),
+            'fio'           => $request->input('fio'),
+            'descr'         => $request->input('descr'),
+            'ip'            => $request->input('ip'),
+            'status'        => $request->input('status'),
+        ]);
+
+        return back()->with('success', 'Successfully updated');
+    }
+
     public function adminGetSubDep($id)
     {
         $sub_menu = SubDepartList::where('depart_id', $id)->orderBy('sort', 'ASC')->get();
@@ -154,7 +180,7 @@ class IpPhoneController extends Controller
     {
         $model = IpList::findOrFail($id);
         $model->delete();
-        return response('The record deleted successfully', 200);
+        return back()->with('success', 'Successfully deleted');
     }
 
     public function adminIpOld($id)

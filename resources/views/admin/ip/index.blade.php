@@ -284,7 +284,7 @@
                             <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
                           </div>
                           <select class="form-control" data-style="btn btn-link" id="searchSubDepart" name="sub_depart_id" data-live-search="true">
-                            <option value="'+val.id+'"> Select Sub Department</option>
+                            <option value=""> Select Sub Department</option>
                             @foreach($childDep as $value)
                                 <option value="{{ $value->id }}"> {{ $value->title_uz }} </option>
                             @endforeach
@@ -366,7 +366,7 @@
       <div class="modal-content">
         <div class="card card-signup card-plain">
             <div class="modal-header">
-              <h5 class="modal-title card-title">Update Document</h5>
+              <h5 class="modal-title card-title">Update Ip phone details</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <i class="material-icons">clear</i>
               </button>
@@ -376,8 +376,10 @@
               
               <div class="row">
                 <div class="col-md-10 m-auto">
-                  <form class="form" method="" action="">
+                  <form class="form" method="POST" action="{{ route('update-ip')}}">
                     @csrf
+
+                    <input type="text" name="id" id="ip_id" hidden>
                     <div class="form-group">
                       <div class="input-group">
                         <div class="input-group-prepend">
@@ -385,6 +387,13 @@
                         </div>
                         <select class="form-control" data-style="btn btn-link" id="updateDepart" name="depart_id" data-live-search="true">
                           <option id="defaultMenu" value="" disabled selected>Select Department</option>
+                          @foreach($parentDep as $value)
+                              @if($value->id == ($depart_id??''))
+                                <option value="{{ $value->id }}" selected> {{ $value->title_uz }} </option>
+                              @else
+                                <option value="{{ $value->id }}"> {{ $value->title_uz }} </option>
+                              @endif
+                            @endforeach
                         </select>
                       </div>
                     </div>
@@ -595,7 +604,7 @@
     // On updating 
     $('#updateDepart').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
       
-      let optionSubValue = $('#updateSubDepart').val()
+      let optionSubValue = $(this).data('id')
       let optionValue = $(this).val()
 
       $('#updateSubDepart option').remove()
@@ -612,7 +621,15 @@
           })
 
           $('#updateSubDepart').append(newOptions).selectpicker('refresh')
+          
+          $('#updateSubDepart').selectpicker('refresh')
+          $('#updateSubDepart').selectpicker('render')
+
           $('#updateSubDepart').selectpicker('val', optionSubValue)
+
+          $('#updateSubDepart').selectpicker('refresh')
+          $('#updateSubDepart').selectpicker('render')
+
 
         },
         error: function(e){
@@ -627,7 +644,6 @@
     $('.editLink').click(function() {
       
       // Clear options before call
-      $('#updateDepart option').remove().selectpicker('refresh')
       $('#updateSubDepart option').remove().selectpicker('refresh')
 
       let itemId = $(this).data('id')
@@ -648,26 +664,14 @@
           let menuOptions     = ''
           let subMenuOptions  = ''
           
+          $('#ip_id').val(itemId);
           $('#update_fio').val(old.fio)
           $('#update_descr').val(old.descr)
           $('#update_ip').val(old.ip)
 
-          $.each(dep_list, function(index, val){
-            menuOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
-          })
-
-          $.each(sub_dep_list, function(index, val){
-            subMenuOptions += '<option value="'+val.id+'">'+val.title_uz+'</option>'
-          })
-
-          $('#updateDepart').append(menuOptions)
-          $('#updateSubDepart').append(subMenuOptions)
-
-          $('#updateDepart').selectpicker('val', current_dep.id)
-          $('#updateSubDepart').selectpicker('val', current_sub_dep.id)
-
-          $('#updateSubDepart').selectpicker('refresh')
-          $('#updateSubDepart').selectpicker('render')
+          $('#updateDepart').data('id',current_sub_dep.id); //setter
+          $('#updateDepart').selectpicker('val', old.depart_id)
+          // $('#updateSubDepart').selectpicker('val', current_sub_dep)
 
 
           if(old.status){
@@ -676,7 +680,6 @@
           else{
             $('#updateStatusPassive').prop('checked', true)
           } 
-
 
         },
         error: function(e){
