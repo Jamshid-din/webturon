@@ -275,14 +275,14 @@ class AdminMenuController extends Controller
 
     public function getArchSubMenu($id){
         
-        $sub_menu = ArchMenuList::where('parent_id', $id)->orderBy('id', 'ASC')->get();
+        $sub_menu = ArchMenuList::where('parent_id', $id)->orderBy('sort', 'ASC')->get();
 
         return response()->json(['sub_menu' => $sub_menu]);
     }    
 
     public function getArchParentSubMenu($parent_id){
         
-        $sub_menu = ArchMenuList::find($parent_id)->orderBy('id', 'ASC')->get();
+        $sub_menu = ArchMenuList::find($parent_id)->orderBy('sort', 'ASC')->get();
 
         return response()->json(['sub_menu' => $sub_menu]);
     }
