@@ -17,6 +17,7 @@
                                     <th>Ф.И.О.</th>
                                     <th>IP</th>
                                     <th>Должность</th>
+                                    <th>Sort</th>
                                 </tr>
                                 <tr>
                                     <th>#</th>
@@ -25,6 +26,7 @@
                                     <th><input type="text" placeholder="Поиск Ф.И.О." /></th>
                                     <th><input type="text" placeholder="Поиск IP" /></th>
                                     <th><input type="text" placeholder="Поиск Должность" /></th>
+                                    <th>asdf</th>
                                 </tr>
                             </thead>
                             
@@ -36,6 +38,7 @@
                                     <th>Ф.И.О.</th>
                                     <th>IP</th>
                                     <th>Должность</th>
+                                    <th>Sort</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -110,7 +113,13 @@
                         proccessing: true,
                         data: res,
                         columnDefs: [
-                            { className: "ip", "targets": [ -2 ] }
+                            {   className: "ip", 
+                                "targets": [ -3 ] 
+                            },
+                            { 
+                                "targets": [ 6 ],
+                                "visible": false 
+                            },
                         ],
                         columns : [
                             { data: "id" },
@@ -119,8 +128,9 @@
                             { data: "fio"},
                             { data: "ip"},
                             { data: "descr"},
+                            { data: "sort"},
                         ],
-                        order: [[ 0, 'asc' ]],
+                        order: [[ 6, 'asc' ]],
                         responsive  : true,
                         fixedColumns:   true,
                         orderCellsTop: true,
@@ -184,7 +194,13 @@
                         proccessing: true,
                         data: res,
                         columnDefs: [
-                            { className: "ip", "targets": [ -2 ] }
+                            {   className: "ip", 
+                                "targets": [ -3 ] 
+                            },
+                            { 
+                                "targets": [ 6 ],
+                                "visible": false 
+                            },
                         ],
                         columns : [
                             { data: "id" },
@@ -193,8 +209,9 @@
                             { data: "fio"},
                             { data: "ip"},
                             { data: "descr"},
+                            { data: "sort"},
                         ],
-                        order: [[ 0, 'asc' ]],
+                        order: [[ 6, 'asc' ]],
                         responsive  : true,
                         orderCellsTop: true,
                         fixedHeader: {

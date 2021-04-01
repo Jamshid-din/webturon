@@ -37,11 +37,10 @@ class IpPhoneController extends Controller
                 $models = DB::table('ip_lists AS a')
                     ->join('depart_lists AS b', 'a.depart_id', 'b.id')
                     ->join('sub_depart_lists AS c', 'a.sub_depart_id', 'c.id')
-                ->select('a.id','a.fio','a.ip','a.descr','b.title_uz AS dep_title_uz', 'b.title_ru AS dep_title_ru', 
+                ->select('a.id','a.fio','a.ip','a.descr','a.sort','b.title_uz AS dep_title_uz', 'b.title_ru AS dep_title_ru', 
                 'c.title_uz AS sub_title_uz','c.title_ru AS sub_title_ru')
                 ->where('a.status', 1)
                 ->orderBy('a.sort', 'ASC')
-                ->orderBy('a.id', 'ASC')
                 ->get();
     
                 break;
@@ -51,12 +50,11 @@ class IpPhoneController extends Controller
                 $models = DB::table('ip_lists AS a')
                     ->join('depart_lists AS b', 'a.depart_id', 'b.id')
                     ->join('sub_depart_lists AS c', 'a.sub_depart_id', 'c.id')
-                ->select('a.id','a.fio','a.ip','a.descr','b.title_uz AS dep_title_uz', 'b.title_ru AS dep_title_ru', 
+                ->select('a.id','a.fio','a.ip','a.descr','a.sort','b.title_uz AS dep_title_uz', 'b.title_ru AS dep_title_ru', 
                 'c.title_uz AS sub_title_uz','c.title_ru AS sub_title_ru')
                 ->where('a.sub_depart_id', $sub_dep_id)
                 ->where('a.status', 1)
                 ->orderBy('a.sort', 'ASC')
-                ->orderBy('a.id', 'ASC')
                 ->get();
 
                 break;
