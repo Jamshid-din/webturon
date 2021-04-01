@@ -66,7 +66,6 @@
                                         <a class="mainT" href="http://test.turonbank.uz" target="_blank">Тестинг</a>
                                     </li>
                                     <li><a class="mainT" href="http://edo.turonbank.uz" target="_blank">EDO</a></li>
-                                    <li><a class="mainT" href="http://bi.turonbank.uz/" target="_blank">Metabase</a></li>
                                     <li><a class="mainT" href="https://mail.turonbank.uz/" target="_blank">Почта</a></li>
                                 </ul>
                             </li>
