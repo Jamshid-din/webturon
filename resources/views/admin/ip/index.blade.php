@@ -202,6 +202,15 @@
                       <div class="form-group">
                         <div class="input-group">
                           <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="material-icons">sort_by_alpha</i></div>
+                          </div>
+                            <input type="number" class="form-control" name="sort" placeholder="Sort" min="0" max="1000" required>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
                             <div class="input-group-text"><i class="material-icons">done_all</i></div>
                           </div>
                           <div class="form-check form-check-radio form-check-inline">
@@ -439,6 +448,15 @@
                     <div class="form-group">
                       <div class="input-group">
                         <div class="input-group-prepend">
+                          <div class="input-group-text"><i class="material-icons">sort_by_alpha</i></div>
+                        </div>
+                          <input type="number" class="form-control" id="update_sort" name="sort" min="0" max="1000" placeholder="Sort" value="{{ $sort??'' }}">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
                           <div class="input-group-text"><i class="material-icons">done_all</i></div>
                         </div>
                         <div class="form-check form-check-radio form-check-inline">
@@ -667,6 +685,7 @@
           $('#ip_id').val(itemId);
           $('#update_fio').val(old.fio)
           $('#update_descr').val(old.descr)
+          $('#update_sort').val(old.sort)
           $('#update_ip').val(old.ip)
 
           $('#updateDepart').data('id',current_sub_dep.id); //setter

@@ -14,6 +14,7 @@ class IpList extends Model
         'fio',
         'ip',
         'descr',
+        'sort',
         'status'
     ];
 

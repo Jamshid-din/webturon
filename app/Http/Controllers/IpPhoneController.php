@@ -40,6 +40,7 @@ class IpPhoneController extends Controller
                 ->select('a.id','a.fio','a.ip','a.descr','b.title_uz AS dep_title_uz', 'b.title_ru AS dep_title_ru', 
                 'c.title_uz AS sub_title_uz','c.title_ru AS sub_title_ru')
                 ->where('a.status', 1)
+                ->orderBy('a.sort', 'ASC')
                 ->orderBy('a.id', 'ASC')
                 ->get();
     
@@ -54,6 +55,7 @@ class IpPhoneController extends Controller
                 'c.title_uz AS sub_title_uz','c.title_ru AS sub_title_ru')
                 ->where('a.sub_depart_id', $sub_dep_id)
                 ->where('a.status', 1)
+                ->orderBy('a.sort', 'ASC')
                 ->orderBy('a.id', 'ASC')
                 ->get();
 
@@ -75,7 +77,6 @@ class IpPhoneController extends Controller
         $childDep = SubDepartList::where('depart_id', $request->input(['depart_id']))->orderBy('sort', 'ASC')->get();
 
         if($request->input()) {
-
             $depart_id      = $request->input(['depart_id']);
             $sub_depart_id  = $request->input(['sub_depart_id']);
             $fio            = $request->input(['fio']);
@@ -85,7 +86,7 @@ class IpPhoneController extends Controller
 
             $currentDep     = DepartList::find($depart_id);
             $currentSubDep  = SubDepartList::where($sub_depart_id);
-            $search         = IpList::orderBy('depart_id', 'ASC');
+            $search         = IpList::orderBy('sort', 'ASC');
 
             if($depart_id)      $search->where('depart_id', $depart_id);
 
@@ -113,7 +114,7 @@ class IpPhoneController extends Controller
             return view('admin.ip.index',
             compact('models','parentDep','childDep','currentDep','currentSubDep','depart_id','sub_depart_id','fio','descr','ip','status'));
         }
-        $models = IpList::orderBy('depart_id', 'ASC')->paginate(10); 
+        $models = IpList::orderBy('depart_id', 'ASC')->orderBy('sort', 'ASC')->paginate(10); 
 
         return view('admin.ip.index',compact('models','parentDep','childDep'));
     }
@@ -136,6 +137,7 @@ class IpPhoneController extends Controller
         $new->fio           = $request->input('fio');
         $new->descr         = $request->input('descr');
         $new->ip            = $request->input('ip');
+        $new->sort          = $request->input('sort');
         $new->status        = $request->input('status');
         $new->save();
 
@@ -149,6 +151,7 @@ class IpPhoneController extends Controller
             'sub_depart_id' => 'required',
             'fio'           => 'required',
             'descr'         => 'required',
+            'sort'          => 'required',
             'ip'            => 'required',
             'status'        => 'required',
         ]);
@@ -162,6 +165,7 @@ class IpPhoneController extends Controller
             'sub_depart_id' => $request->input('sub_depart_id'),
             'fio'           => $request->input('fio'),
             'descr'         => $request->input('descr'),
+            'sort'          => $request->input('sort'),
             'ip'            => $request->input('ip'),
             'status'        => $request->input('status'),
         ]);
