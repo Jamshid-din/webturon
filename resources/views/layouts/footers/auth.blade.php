@@ -13,7 +13,7 @@
       &copy;
       <script>
         document.write(new Date().getFullYear())
-      </script>, made by Jamshid
+      </script>, IT Team
     </div>
   </div>
 </footer>

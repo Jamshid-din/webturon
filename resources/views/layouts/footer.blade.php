@@ -84,7 +84,7 @@
                 <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
                     <div class="footer-copyright">
                         
-                        <p> &copy;<script>document.write(new Date().getFullYear());</script> WEB TURON | Designed  by <a href="">Ziyod Ibrakhimjanov</a></p>
+                        <p> &copy;<script>document.write(new Date().getFullYear());</script> WEB TURON | Designed  by <a href="">IT Team</a></p>
                         
                     </div>
                 </div>
