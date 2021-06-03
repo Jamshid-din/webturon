@@ -352,6 +352,9 @@
                             <div class="input-group-text"><i class="material-icons">subdirectory_arrow_right</i></div>
                           </div>
                           <select class="form-control" data-style="btn btn-link" id="updateParentMenu" name="parent" required  data-live-search="true">
+                            @if(($menuType??'') === 'parent')
+                              <option value="0" selected> No parent </option>
+                            @endif
                             @foreach($parent as $value)
                               <option value="{{$value->id}}"> {{ $value->parents($value->id) }} </option>
                             @endforeach
