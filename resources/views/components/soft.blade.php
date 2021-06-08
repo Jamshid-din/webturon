@@ -72,7 +72,6 @@
     <!--FAQS AREA END-->
 
     <script src="{{ asset ("js/vendor/jquery-1.12.4.min.js") }}"></script>
-    <script src="{{ asset('js/treeview.js') }}"></script>
 
     <script type="text/javascript">
 
