@@ -302,11 +302,12 @@
                 data: $("#anonymForm").serialize(),
                 url : '/home-store',
                 success : function(data){
+                    console.log(data)
                     $('#delete').modal('toggle')
                     $('#responseModal .modal-title').text('Success')
                     $('#responseModal .modal-footer button').removeClass('btn-danger').addClass('btn-success')
                     $('#responseModal').modal('toggle')
-                    $('#responseModal .modal-body p').text(data.success)
+                    $('#responseModal .modal-body p').text("Успешно отправлено")
                     $("#responseModal").modal("show")
                     
                     $('#closeModal').click(function() {
