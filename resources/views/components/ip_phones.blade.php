@@ -130,7 +130,6 @@
                             { data: "descr"},
                             { data: "sort"},
                         ],
-                        order: [[ 6, 'asc' ]],
                         responsive  : true,
                         fixedColumns:   true,
                         orderCellsTop: true,

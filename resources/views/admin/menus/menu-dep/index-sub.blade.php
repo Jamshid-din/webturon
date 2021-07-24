@@ -77,6 +77,7 @@
                               <th> Parent </th>
                               <th> Title </th>
                               <th> Title Ru </th>
+                              <th> Sort </th>
                               <th> Status </th>
                               <th class="text-right"> Actions </th>
                           </tr>
@@ -88,29 +89,30 @@
                                 <td>{{ $model->parentMenu->title_uz??'(Пусто)' }}</td>
                                 <td>{{ $model->title_uz }}</td>
                                 <td>{{ $model->title_ru }}</td>
-                              <td>
-                                @if($model->status)
-                                  <snap class="btn btn-success btn-link p-1" rel="tooltip">
-                                    <i class="material-icons">check_circle_outline</i>
+                                <td>{{ $model->sort }}</td>
+                                <td>
+                                  @if($model->status)
+                                    <snap class="btn btn-success btn-link p-1" rel="tooltip">
+                                      <i class="material-icons">check_circle_outline</i>
+                                      <div class="ripple-container"></div>
+                                    </span>
+                                  @else
+                                    <snap class="btn btn-danger btn-link p-1" rel="tooltip">
+                                      <i class="material-icons">error_outline</i>
+                                      <div class="ripple-container"></div>
+                                    </span>
+                                  @endif
+                                </td>
+                                <td class="text-right">
+                                  <a class="btn btn-success btn-link m-0 p-1 editLink" href="#" rel="tooltip" data-id="{{ $model->id }}" title="" data-toggle="modal" data-target="#edit">
+                                    <i class="material-icons">edit</i>
                                     <div class="ripple-container"></div>
-                                  </span>
-                                @else
-                                  <snap class="btn btn-danger btn-link p-1" rel="tooltip">
-                                    <i class="material-icons">error_outline</i>
+                                  </a>
+                                  <a class="btn btn-danger btn-link m-0 p-1 deleteLink" href="#" rel="tooltip" data-id="{{ $model->id }}" title="" data-toggle="modal" data-target="#delete">
+                                    <i class="material-icons">close</i>
                                     <div class="ripple-container"></div>
-                                  </span>
-                                @endif
-                              </td>
-                              <td class="text-right">
-                                <a class="btn btn-success btn-link m-0 p-1 editLink" href="#" rel="tooltip" data-id="{{ $model->id }}" title="" data-toggle="modal" data-target="#edit">
-                                  <i class="material-icons">edit</i>
-                                  <div class="ripple-container"></div>
-                                </a>
-                                <a class="btn btn-danger btn-link m-0 p-1 deleteLink" href="#" rel="tooltip" data-id="{{ $model->id }}" title="" data-toggle="modal" data-target="#delete">
-                                  <i class="material-icons">close</i>
-                                  <div class="ripple-container"></div>
-                                </a>
-                              </td>
+                                  </a>
+                                </td>
                               </tr>
                               @endforeach
                           </tbody>

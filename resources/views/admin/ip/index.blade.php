@@ -71,6 +71,7 @@
                               <th> Name</th>
                               <th> Job</th>
                               <th> Ip</th>
+                              <th> Sort</th>
                               <th> Status</th>
                               <th class="text-right"> Actions </th>
                           </tr>
@@ -84,6 +85,7 @@
                                 <td>{{ $model->fio }}</td>
                                 <td>{{ $model->descr }}</td>
                                 <td>{{ $model->ip }}</td>
+                                <td>{{ $model->sort }}</td>
                                 <td>
                                   @if($model->status)
                                     <snap class="btn btn-success btn-link p-1" rel="tooltip">

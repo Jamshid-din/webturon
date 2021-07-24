@@ -675,7 +675,6 @@ class AdminMenuController extends Controller
             abort(404);
         } 
 
-
         $menuType = 'child';
         $parent = DepartList::orderBy('sort', 'ASC')->get();
         if($request->input()) {

@@ -35,13 +35,13 @@
                         <a href="/" class="navbar-brand"><img src="{{ asset ("images/turon_bank-1024x1024%20(1).png") }}" alt="logo" width="190px"></a>
                     </div>
                     <div class="search-and-language-bar pull-right">
-                        <ul>
-                            <!-- <li class="select-language"><i class="fa fa-globe"></i> </li> -->
-                            <li class="select-language"><a href="#" value="RU">РУ</a></li>
-                            <li class="select-language">  <a href="#" value="UZ">УЗ</a></li>
-                            <li class="search-box"><i class="fa fa-search"></i></li>
-
-                        </ul>
+                        <!-- 
+                            <ul>
+                                <li class="select-language"><a href="#" value="RU">РУ</a></li>
+                                <li class="select-language">  <a href="#" value="UZ">УЗ</a></li>
+                                <li class="search-box"><i class="fa fa-search"></i></li>
+                            </ul> 
+                        -->
                         <form action="#" class="search-form">
                             <input type="search" name="search" id="search">
                             <button type="submit"><i class="fa fa-search"></i></button>
@@ -60,8 +60,6 @@
                             </li>
                             <li><a href="">Web Turon</a>
                                 <ul>
-                                    <li><a class="mainT" href="" target="_blank">Banking</a></li>
-                                    <li><a class="mainT" href="" target="_blank">Cabinet</a></li>
                                     <li>
                                         <a class="mainT" href="http://test.turonbank.uz" target="_blank">Тестинг</a>
                                     </li>
