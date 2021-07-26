@@ -182,7 +182,7 @@ class IpPhoneController extends Controller
     {
         $model = IpList::findOrFail($id);
         $model->delete();
-        return back()->with('success', 'Successfully deleted');
+        return response()->json(['result' => 'Successfully deleted']);
     }
 
     public function adminIpOld($id)

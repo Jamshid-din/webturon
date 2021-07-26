@@ -23,7 +23,8 @@ class AdminMenuController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public bool $isFinish = false;
+
+    //  public bool $isFinish = false;
 
     // Archive Menu
     public function archIndex(Request $request){

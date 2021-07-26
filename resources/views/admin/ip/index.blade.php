@@ -197,7 +197,7 @@
                           <div class="input-group-prepend">
                             <div class="input-group-text"><i class="material-icons">contact_phone</i></div>
                           </div>
-                            <input type="number" class="form-control" name="ip" placeholder="IP Number" min="0" max="10000000000000" required>
+                            <input type="number" class="form-control" name="ip" placeholder="IP Number" min="0" max="999999999" required>
                         </div>
                       </div>
 
@@ -326,7 +326,7 @@
                           <div class="input-group-prepend">
                             <div class="input-group-text"><i class="material-icons">contact_phone</i></div>
                           </div>
-                            <input type="number" class="form-control" id="search_ip" name="ip"  min="0" max="10000000000000" placeholder="IP Number" value="{{ $ip??'' }}">
+                            <input type="number" class="form-control" id="search_ip" name="ip"  min="0" max="999999999" placeholder="IP Number" value="{{ $ip??'' }}">
                         </div>
                       </div>
 
@@ -546,7 +546,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <p class="text-center">Modal body text goes here.</p>
+          <p class="text-center"></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn" data-dismiss="modal">Close</button>
@@ -730,11 +730,12 @@
           type: 'delete',
 
           success: function(result) {
+            console.log(result)
             $('#delete').modal('toggle')
             $('#responseModal .modal-title').text('Success')
             $('#responseModal .modal-footer button').removeClass('btn-danger').addClass('btn-success')
+            $('#responseModal .modal-body p').text(result.rusult)
             $('#responseModal').modal('toggle')
-            $('#responseModal .modal-body p').text(result)
 
             setTimeout(function() {$('#responseModal').modal('hide')}, 1500)
             $('#row_'+itemId).remove()
