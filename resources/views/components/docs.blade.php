@@ -265,9 +265,9 @@
             // End AJAX
 
             // Go to #myDiv smoothly after click
-            $('html, body').animate({
-                scrollTop: $("#myDiv").offset().top
-            }, 1500);
+            // $('html, body').animate({
+            //     scrollTop: $("#myDiv").offset().top
+            // }, 1500);
             
         });
 
