@@ -187,71 +187,66 @@
             let dep_id = $(this).attr("data-id");
 
             $.ajax({
-                "url": "/docs/fetch_data",
-                'type': "GET",
-                'data': { id: dep_id },
-                beforeSend: function(){
-                    $('#example').fadeOut();
-                },
+                url: "/docs/fetch_data",
+                type: "GET",
+                data: { id: dep_id }, // Default
                 success: function(data){
 
-                // res variable defined in ready function
-                res = data.msg;
+                    // res variable defined in ready function
+                    res = data.msg;
 
-                // Fill Datatable with default values
-                let table = $('#example').DataTable( {
-                    destroy: true,
-                    proccessing: true,
-                    data: res,
-                    columnDefs: [ 
-                        {
-                            targets: 2,
-                            data: null,
-                            defaultContent: "<button class=\"btn btn-info details-button\"> Детали...<i class=\"fa fa-info\" aria-hidden=\"true\"> </i></button>"
-                        },
-                    
-                    ],
-                    columns : [
-                        { data: "id" },
-                        { data: "doc_title"},
-                    ],
-                    order: [[ 0, 'asc' ]],
-                    responsive  : true,
-                    fixedHeader: true,
-                    processing  : true,
-                    pageLength  : 10
-                });
+                    // Fill Datatable with default values
+                    let table = $('#example').DataTable( {
+                        destroy: true,
+                        proccessing: true,
+                        data: res,
+                        columnDefs: [ 
+                            {
+                                targets: 2,
+                                data: null,
+                                defaultContent: "<button class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#exampleModal\"> Детали...<i class=\"fa fa-info\" aria-hidden=\"true\"> </i></button>"
+                            },
+                        ],
+                        columns : [
+                            { data: "id" },
+                            { data: "doc_title"},
+                        ],
+                        order: [[ 0, 'asc' ]],
+                        responsive  : true,
+                        fixedHeader: true,
+                        processing  : true,
+                        pageLength  : 10
+                    });
 
-                // The First Column Autoincrement 
-                table.on( 'order.dt search.dt', function () {
-                    table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-                        cell.innerHTML = i+1;
-                    } );
-                } ).draw();
-
-                // On click button on the table for details
-                $('.details-button').click('button', function () {
-                    let data = table.row( $(this).parents('tr') ).data();
-
-                    var tr = $(this).closest('tr');
-                    var row = table.row( tr );
-            
-                    if ( row.child.isShown() ) {
-                        
-                        // This row is already open - close it
-                        $('div.slider', row.child()).slideUp( function () {
-                            row.child.hide();
-                            tr.removeClass('shown');
+                    // The First Column Autoincrement 
+                    table.on( 'order.dt search.dt', function () {
+                        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                            cell.innerHTML = i+1;
                         } );
-                    }
-                    else {
-                        // Open this row
-                        row.child( format(row.data())).show();
-                        tr.addClass('shown');
-                        
-                        $('div.slider', row.child()).fadeTo();
-                    }
-                });
+                    } ).draw();
+
+                    // Add event listener for opening and closing details
+                    $('#example tbody').on('click', 'button', function () {
+                        var tr = $(this).closest('tr');
+                        var row = table.row( tr );
+                
+                        if ( row.child.isShown() ) {
+                            
+                            // This row is already open - close it
+                            $('div.slider', row.child()).slideUp( function () {
+                                row.child.hide();
+                                tr.removeClass('shown');
+                            } );
+                        }
+                        else {
+                            // Open this row
+                            row.child( format(row.data())).show();
+                            tr.addClass('shown');
+                            
+                            $('div.slider', row.child()).fadeTo();
+                        }
+                    } );
+
 
                 },
                 complete: function(){
@@ -260,7 +255,7 @@
                 error: function(e) {
                     console.log(e)
                 }
-
+                
             });
             // End AJAX
 
