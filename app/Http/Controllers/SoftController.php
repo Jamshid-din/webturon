@@ -115,6 +115,8 @@ class SoftController extends Controller
             'status' => 'required',
         ]);
 
+        $ext = pathinfo($request->file('file'), PATHINFO_EXTENSION);
+
         if ($request->hasFile('file')){
             $newFile = new SoftList();
             
@@ -124,7 +126,7 @@ class SoftController extends Controller
             $newFile->menu_id = $request->input('menu_id');
             $newFile->name    = $request->file("file")->getClientOriginalName();
             $newFile->hash    = $request->file('file')->hashName();
-            $newFile->ext     = $request->file('file')->extension();
+            $newFile->ext     = $ext;
             $newFile->size    = $request->file("file")->getSize();
             $newFile->status  = $request->input("status");
             $newFile->save();

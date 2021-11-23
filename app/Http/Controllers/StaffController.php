@@ -43,7 +43,7 @@ class StaffController extends Controller
                 ->select('a.*','b.doc_name','d.doc_name as e_doc_name')
                 ->where('a.status', 1)
                 ->orderBy('a.created_at', 'DESC')
-                ->take(10)
+                ->take(50)
                 ->get();  
                 break;
             
